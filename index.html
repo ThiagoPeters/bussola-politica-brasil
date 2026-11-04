@@ -1122,13 +1122,51 @@ body { background: #f4f6f9; color: #16202e; }
 .bp-title { font-size: 1.3rem; }
 .bp-kpi-value { font-size: 1.8rem; }
 }
+#printReport { display: none; }
 @media print {
-.no-print, .bp-header .bp-actions, .bp-tabs, .bp-footer, .bp-nav-row, .bp-dialog, .shell-footer, #btnBackHome, #btnBackHome2, #btnReset2, .bp-tabs button { display: none !important; }
-body { background: #fff !important; }
-.bp-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-.bp-tab-panel { display: block !important; }
-.bp-tab-panel.bp-hidden { display: block !important; }
-.bp-wrap { max-width: 100%; padding: 0; }
+.no-print, .bp-header, .bp-tabs, .bp-footer, .bp-nav-row, .bp-dialog, .shell-footer, .bp-tab-panel, #viewIntro, #viewQuiz, #viewReview, #viewResult, .bp-wrap > .bp-header { display: none !important; }
+@page { size: A4; margin: 16mm 14mm 18mm; }
+* { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+body { background: #fff !important; color: #16202e !important; font-size: 11pt; }
+body * { visibility: hidden; }
+#printReport, #printReport * { visibility: visible; }
+#printReport { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+.rp-page { page-break-before: always; break-before: page; }
+.rp-page:first-child { page-break-before: auto; break-before: auto; }
+.rp-cover { height: 240mm; display: flex; flex-direction: column; justify-content: space-between; }
+.rp-h1 { font-size: 26pt; font-weight: 800; margin: 0; color: #2c4a72; }
+.rp-sub { font-size: 13pt; margin: 4px 0 0; color: #4a5568; }
+.rp-meta { font-size: 9.5pt; color: #4a5568; border-top: 1px solid #cbd5e0; padding-top: 8px; margin-top: 10px; }
+.rp-main { border: 2px solid #2c4a72; border-radius: 12px; padding: 22px; text-align: center; margin: 24px 0; }
+.rp-main .rp-label { font-size: 9pt; letter-spacing: .1em; text-transform: uppercase; color: #4a5568; }
+.rp-main .rp-type { font-size: 22pt; font-weight: 800; color: #2c4a72; margin: 6px 0; }
+.rp-sec-list { font-size: 10pt; color: #4a5568; }
+.rp-h2 { font-size: 14pt; font-weight: 700; color: #2c4a72; border-bottom: 2px solid #2c4a72; padding-bottom: 4px; margin: 0 0 10px; }
+.rp-num { display: inline-block; margin-right: 6px; }
+.rp-p { font-size: 10.5pt; line-height: 1.55; margin: 0 0 8px; }
+.rp-ul { margin: 0 0 8px; padding-left: 18px; font-size: 10.5pt; }
+.rp-ul li { margin-bottom: 4px; }
+.rp-box { border: 1px solid #cbd5e0; border-left: 4px solid #9b2c2c; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; font-size: 10pt; page-break-inside: avoid; break-inside: avoid; }
+.rp-ruler-wrap { margin: 12px 0; }
+.rp-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+.rp-table th { text-align: left; background: #e6ecf5; color: #2c4a72; padding: 6px; border-bottom: 1px solid #2c4a72; }
+.rp-table td { padding: 5px 6px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+.rp-table tr { page-break-inside: avoid; break-inside: avoid; }
+.rp-bar { position: relative; height: 10px; background: #edf2f7; border-radius: 4px; min-width: 120px; }
+.rp-bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.rp-bar b { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1.5px; background: #4a5568; }
+.rp-quad { position: relative; width: 240px; height: 240px; margin: 10px auto; border: 1px solid #a0aec0; background: #f7f9fc; }
+.rp-quad .hx { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #a0aec0; }
+.rp-quad .hy { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #a0aec0; }
+.rp-quad .dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: #2c4a72; border: 2px solid #fff; transform: translate(-50%,-50%); }
+.rp-quad .lb { position: absolute; font-size: 8pt; color: #4a5568; }
+.rp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rp-foot { font-size: 9pt; color: #4a5568; border-top: 1px solid #cbd5e0; margin-top: 14px; padding-top: 8px; }
+.rp-sec-title { page-break-before: always; break-before: page; }
+.rp-sec-title:first-child { page-break-before: auto; break-before: auto; }
+.rp-h3 { font-size: 11pt; font-weight: 700; color: #2c4a72; margin: 12px 0 6px; page-break-after: avoid; break-after: avoid; }
+.rp-ans-full { font-weight: 700; }
+.rp-ans-neu { color: #718096; font-style: italic; }
 }
 </style>
 </head>
@@ -1347,6 +1385,8 @@ body { background: #fff !important; }
 
 <footer class="bp-footer no-print">Bússola Política e Filosófica · Instrumento interpretativo de autoconhecimento · Dados salvos apenas neste navegador.</footer>
 </div>
+
+<div id="printReport"></div>
 
 <dialog class="bp-dialog" id="dlgConfirm" aria-labelledby="dlgConfirmTitle">
 <div class="bp-dialog-body">
@@ -2132,8 +2172,115 @@ window.skipUI && skipUI.toast("Progresso reiniciado.", {type:"success"});
 $("btnReset").addEventListener("click", function(){ confirmDialog("Isto apaga todas as respostas e o resultado salvo. Continuar?", doReset); });
 $("btnReset2").addEventListener("click", function(){ confirmDialog("Isto apaga todas as respostas e o resultado salvo. Continuar?", doReset); });
 
+function buildPrintReport(){
+var R = computeAll();
+var S = R.S;
+var done = state.completedAt ? fmtDateBr(state.completedAt) : fmtDateBr(new Date().toISOString());
+var colors = ["#8b1d13","#c0392b","#d98880","#95a5a6","#8fb3dd","#2860a8","#163d6e"];
+var labels = ["Extrema-esquerda","Esquerda","Centro-esquerda","Centro","Centro-direita","Direita","Extrema-direita"];
+var pos = Math.max(-100,Math.min(100,R.LDR));
+var segs = labels.map(function(l,i){
+var c = colors[i], op = i===R.band.idx ? 1 : 0.35;
+return '<div style="flex:1;background:'+c+';opacity:'+op+';height:14px"></div>';
+}).join("");
+var marker = ((pos+100)/200*100).toFixed(2);
+var rulerHtml = '<div class="rp-ruler-wrap"><div style="position:relative;padding-top:18px"><div style="display:flex;border-radius:6px;overflow:hidden">'+segs+'</div>'+
+'<div style="position:absolute;left:'+marker+'%;top:0;transform:translateX(-50%);font-size:10pt;font-weight:700">▼ '+fmtScore(R.LDR)+'</div></div>'+
+'<div style="display:flex;justify-content:space-between;font-size:7.5pt;color:#4a5568;margin-top:4px"><span>Extrema-esq.</span><span>Centro</span><span>Extrema-dir.</span></div>'+
+'<p class="rp-p" style="margin-top:6px"><b>'+esc(R.band.label)+', '+fmtScore(R.LDR)+'</b></p>'+
+(R.near ? '<p class="rp-p" style="font-size:9.5pt">Sua posição está próxima de '+esc(R.near.label)+'.</p>' : '')+'</div>';
+var hybrid = [["Economia","ECO"],["Costumes","CUL"],["Ordem / liberdade","AUT"],["Nação","NAC"],["Instituições","INS"]].map(function(p){
+return esc(p[0])+": "+esc(axisLabel(p[1],S.scores[p[1]])); }).join(" · ");
+var secTxt = R.cls.secondary.length ? R.cls.secondary.map(function(s){return esc(s.t);}).join(" · ") : "Nenhum";
+var cover = '<section class="rp-page rp-cover">'+
+'<div><h1 class="rp-h1">Bússola Política e Filosófica</h1><p class="rp-sub">Relatório de Orientação Política e Filosófica</p>'+
+'<div class="rp-meta">Data da conclusão: '+done+' · Instrumento interpretativo de autoconhecimento — não constitui diagnóstico.</div></div>'+
+'<div><div class="rp-main"><div class="rp-label">Classificação principal</div><div class="rp-type">'+esc(R.cls.main.t)+'</div>'+
+'<div class="rp-sec-list">Tipos secundários: '+secTxt+'</div></div>'+rulerHtml+
+'<p class="rp-p"><b>Perfil por eixo:</b> '+hybrid+'</p></div>'+
+'<div class="rp-foot">Bússola Política e Filosófica · Dados salvos apenas neste navegador.</div></section>';
+
+var drivers = R.drivers.map(function(d){
+return '<li><b>'+AXIS_NAMES[d.axis]+'</b> ('+fmtScore(S.scores[d.axis]===null?0:S.scores[d.axis])+'): '+(d.impact>=0?"empurrou para a direita":"empurrou para a esquerda")+'.</li>'; }).join("");
+var traits = AXES.filter(function(a){return S.scores[a]!==null;})
+.sort(function(a,b){return Math.abs(S.scores[b])-Math.abs(S.scores[a]);}).slice(0,5)
+.map(function(a,i){ return '<li><b>'+AXIS_NAMES[a]+':</b> '+esc(axisLabel(a,S.scores[a]))+' ('+fmtScore(S.scores[a])+'). '+esc(AXIS_DESC[a])+'</li>'; }).join("");
+var tensions = R.tens.length ? R.tens.map(function(t){
+return '<div class="rp-box"><b>Perguntas '+t.pair[0]+' e '+t.pair[1]+'</b> (divergência '+t.div+')<br>• '+esc(t.qa)+'<br>• '+esc(t.qb)+(t.pattern?'<br><i>'+esc(t.pattern)+'</i>':'')+'</div>'; }).join("")
+: '<p class="rp-p">Nenhuma divergência relevante nos pares de consistência.</p>';
+var summary = buildSummary(R).replace(/<p>/g,'<p class="rp-p">');
+var exec = '<section class="rp-page"><h2 class="rp-h2"><span class="rp-num">1.</span>Resumo executivo</h2>'+summary+
+'<h3 class="rp-h3">Cinco características políticas predominantes</h3><ol class="rp-ul">'+traits+'</ol>'+
+'<h3 class="rp-h3">Principais tensões e contradições</h3>'+tensions+
+'<p class="rp-foot">Relatório gerado em '+done+'.</p></section>';
+
+var rows = AXES.map(function(a){
+var v=S.scores[a], has=v!==null;
+var pctW = has ? Math.abs(v)/2 : 0;
+var side = has && v<0 ? "right:50%" : "left:50%";
+var color = has ? (v>=0?"#2860a8":"#c0392b") : "#a0aec0";
+var bar = '<div class="rp-bar"><b></b><i style="'+side+';width:'+pctW+'%;background:'+color+'"></i></div>';
+return '<tr><td><b>'+AXIS_NAMES[a]+'</b><br><span style="font-size:8pt;color:#4a5568">'+esc(AXIS_POLES[a][0])+' ↔ '+esc(AXIS_POLES[a][1])+'</span></td>'+
+'<td>'+bar+'<div style="font-size:8pt;text-align:center">'+(has?fmtScore(v):"—")+'</div></td>'+
+'<td>'+esc(has?axisLabel(a,v):"indefinido")+'</td><td>'+esc(AXIS_DESC[a])+'</td></tr>'; }).join("");
+var qx = S.scores.ECO===null?0:S.scores.ECO, qy = S.scores.CUL===null?0:S.scores.CUL;
+var dotX = ((qx+100)/200*100).toFixed(1), dotY = (100-(qy+100)/200*100).toFixed(1);
+var quad = '<div class="rp-quad"><div class="hx"></div><div class="hy"></div>'+
+'<span class="lb" style="left:2px;bottom:2px">Coletivismo</span><span class="lb" style="right:2px;bottom:2px">Mercado</span>'+
+'<span class="lb" style="left:2px;top:2px">Progressismo</span><span class="lb" style="right:2px;top:2px">Tradição</span>'+
+'<div class="dot" style="left:'+dotX+'%;top:'+dotY+'%"></div></div>';
+var neutralPct = Math.round(S.neutralPct*100);
+var qual = '<p class="rp-p">Intensidade geral: <b>'+Math.round(S.intensity)+'</b> ('+(S.intensity>=50?"convicção forte":"convicção moderada")+'). Respostas neutras: <b>'+neutralPct+'%</b>. Pares divergentes: <b>'+R.tens.length+'</b>.</p>'+
+'<ul class="rp-ul">'+AXES.map(function(a){ var c=S.coher[a]; return '<li><b>'+AXIS_NAMES[a]+':</b> '+(c===null?"dados insuficientes":(c<=25?"coerência alta":(c<=45?"coerência média":"coerência baixa")))+'</li>'; }).join("")+'</ul>';
+var why = '<ul class="rp-ul">'+(drivers||"<li>Sem respostas suficientes.</li>")+'</ul>';
+var profiles = '<section class="rp-page"><h2 class="rp-h2"><span class="rp-num">2.</span>Perfis por eixo</h2>'+
+'<table class="rp-table"><thead><tr><th>Eixo</th><th>Pontuação (−100 a +100)</th><th>Faixa</th><th>Leitura</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+'<div class="rp-cols" style="margin-top:14px"><div><h3 class="rp-h3">Economia × Costumes</h3>'+quad+'</div>'+
+'<div><h3 class="rp-h3">Indicadores de qualidade</h3>'+qual+'<h3 class="rp-h3">Por que esta posição</h3>'+why+'</div></div></section>';
+
+function authRow(a, cls){
+return '<tr><td><b>'+esc(a.name)+'</b></td><td style="font-family:monospace;font-size:8.5pt">ECO '+fmtScore(a.vec[0])+' · CUL '+fmtScore(a.vec[1])+' · AUT '+fmtScore(a.vec[2])+' · NAC '+fmtScore(a.vec[3])+' · INS '+fmtScore(a.vec[4])+'</td><td style="font-size:9pt">'+esc(a.just)+'</td></tr>'; }
+var rA = rankRefs(S, AUTHORS);
+var topA = rA.slice(0,5).map(function(r){return {name:r.name,vec:r.vec,just:authorJust(S,r.vec,r.name)};});
+var botA = rA.slice(-3).reverse().map(function(r){return {name:r.name,vec:r.vec,just:authorJust(S,r.vec,r.name)};});
+var rC = rankRefs(S, CURRENTS);
+var topC = rC.slice(0,4).map(function(r){return {name:r.name,vec:r.vec,just:authorJust(S,r.vec,r.name)};});
+var botC = rC.slice(-3).reverse().map(function(r){return {name:r.name,vec:r.vec,just:authorJust(S,r.vec,r.name)};});
+var thead = '<thead><tr><th>Nome</th><th>Vetor de posição</th><th>Justificativa</th></tr></thead>';
+var trad = AXES.slice(0,5).map(function(a){ return '<p class="rp-p"><b>'+AXIS_NAMES[a]+':</b> seu perfil dialoga com '+esc((AUTH_TRAD[a]||[]).join(", "))+'.</p>'; }).join("");
+var notice = '<p class="rp-p" style="font-size:9pt;color:#4a5568"><i>Fascismo e nazismo só aparecem como próximos quando NAC e AUT do perfil são muito altos. São tradições históricas específicas e não sinônimos de direita.</i></p>';
+var authors = '<section class="rp-page"><h2 class="rp-h2"><span class="rp-num">3.</span>Autores e correntes</h2>'+
+'<h3 class="rp-h3">Autores com maior afinidade</h3><table class="rp-table">'+thead+'<tbody>'+topA.map(function(a){return authRow(a);}).join("")+'</tbody></table>'+
+'<h3 class="rp-h3">Autores com maior rejeição</h3><table class="rp-table">'+thead+'<tbody>'+botA.map(function(a){return authRow(a);}).join("")+'</tbody></table>'+
+'<h3 class="rp-h3">Correntes mais próximas</h3><table class="rp-table">'+thead+'<tbody>'+topC.map(function(a){return authRow(a);}).join("")+'</tbody></table>'+
+'<h3 class="rp-h3">Correntes mais distantes</h3><table class="rp-table">'+thead+'<tbody>'+botC.map(function(a){return authRow(a);}).join("")+'</tbody></table>'+
+'<h3 class="rp-h3">Diálogo com as tradições intelectuais</h3>'+trad+notice+'</section>';
+
+var sections = [
+["Economia",[]],["Estado e instituições",[]],["Sociedade e costumes",[]],["Segurança e justiça",[]],
+["Cultura e educação",[]],["Política externa e nacionalidade",[]],["Meio ambiente e tecnologia",[]]
+];
+QUESTIONS.forEach(function(q){
+for (var i=0;i<sections.length;i++){ if (sections[i][0]===q[4]) { sections[i][1].push(q); break; } }
+});
+var memo = sections.map(function(sec, si){
+var body = sec[1].map(function(q){
+var r = answerOf(q[0]);
+var label = r===null ? "—" : (SCALE[r-1]);
+var cls = r===null ? "" : (r===3 ? "rp-ans-neu" : (r===1||r===5 ? "rp-ans-full" : ""));
+return '<tr><td>'+q[0]+'</td><td>'+esc(q[1])+'</td><td>'+esc(q[2])+'</td><td class="'+cls+'">'+esc(label)+'</td></tr>'; }).join("");
+return '<section class="rp-page"><h2 class="rp-h2"><span class="rp-num">'+(si+4)+'.</span>Memória das respostas — '+esc(sec[0])+'</h2>'+
+'<table class="rp-table"><thead><tr><th style="width:36px">Nº</th><th>Pergunta</th><th style="width:48px">Dimensão</th><th style="width:150px">Resposta</th></tr></thead><tbody>'+body+'</tbody></table></section>'; }).join("");
+var closing = '<section class="rp-page"><h2 class="rp-h2"><span class="rp-num">11.</span>Fechamento</h2>'+
+'<p class="rp-p">Este relatório é um mapa aproximado, construído a partir de 100 afirmações simplificadas. Ele descreve tendências do seu pensamento político e filosófico, não define quem você é. Use-o como ponto de partida para leitura, debate e reflexão.</p>'+
+'<div class="rp-foot">Data da conclusão: '+done+' · Bússola Política e Filosófica · Resultado interpretativo, não diagnóstico.</div></section>';
+
+$("printReport").innerHTML = cover + exec + profiles + authors + memo + closing;
+}
+
 $("btnPrint").addEventListener("click", function(){
-window.skipUI && skipUI.toast("Preparando impressão do relatório...");
+window.skipUI && skipUI.toast("Preparando relatório para impressão...");
+buildPrintReport();
 setTimeout(function(){ window.print(); }, 150);
 });
 function summaryText(){
