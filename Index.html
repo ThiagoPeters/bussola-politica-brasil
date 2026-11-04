@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bússola Política e Filosófica</title>
+<style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
+   override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+  --success: #0a7a35;
+  --danger: #c0262d;
+  --warning: #8a5300;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+/* Pages generated before the shell had its own components still link the
+   basecoat CDN, which reads its own tokens and switches theme only on a
+   .dark class. Bridged to the shell's, whatever of it those pages use takes
+   the page's accent and follows the declared theme. Its --accent token is a
+   hover tint, renamed in its theme as --color-accent; the shell's --accent is
+   the brand colour, so the tint is derived from it here. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-contrast);
+  --secondary: color-mix(in srgb, var(--text) 7%, var(--surface));
+  --secondary-foreground: var(--text);
+  --muted: color-mix(in srgb, var(--text) 5%, var(--surface));
+  --muted-foreground: var(--text-muted);
+  --color-accent: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --color-accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+* { box-sizing: border-box; }
+/* The reset the pages were written against: they all linked basecoat, which
+   ships Tailwind's. Its components now live here, so the reset does too. */
+*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }
+/* Preflight's rule too: without it a component class that sets display
+   (.alert, .card, .btn…) beats the hidden attribute and shows the element. */
+[hidden]:where(:not([hidden="until-found"])) { display: none !important; }
+.hidden { display: none !important; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: inherit; }
+b, strong { font-weight: bolder; }
+ol, ul, menu { list-style: none; }
+svg, video, canvas, iframe { display: block; vertical-align: middle; }
+button, input, select, textarea { color: inherit; background-color: transparent; border-radius: 0; }
+table { border-collapse: collapse; }
+hr { height: 0; color: inherit; border-top-width: 1px; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: clamp(22px, 2.3vw, 28px); font-weight: 650; line-height: 1.1; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: var(--success); }
+.kpi .kpi-delta.down { color: var(--danger); }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 12px; font-size: 12.5px; color: var(--text-muted); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.chart-legend b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge, .eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+/* A pill keeps its content width inside flex and grid columns, which would
+   otherwise stretch it across the card; a centred parent still centres it. */
+.shell-badge, .eyebrow, .badge { width: fit-content; max-width: 100%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* Layout and type utilities: what the pages kept spelling in style="".
+   Spacing and type sizes follow Tailwind's scale; there is no Tailwind. */
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stack { display: flex; flex-direction: column; gap: var(--space); }
+.between { justify-content: space-between; }
+.grow { flex: 1 1 0; min-width: 0; }
+.cols-2, .cols-3, .cols-4, .cols-5 { display: grid; gap: var(--space); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .cols-2, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) { .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.m-0 { margin: 0; }
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; }
+.text-xs { font-size: 12px; } .text-sm { font-size: 14px; } .text-base { font-size: 16px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 20px; line-height: 1.35; }
+.text-2xl { font-size: 24px; line-height: 1.25; } .text-3xl { font-size: 30px; line-height: 1.2; }
+.font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+.text-right { text-align: right; } .text-center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.w-full { width: 100%; }
+.text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+
+/* Components, with basecoat 1.0 markup (variants and sizes are data
+   attributes) and the shell tokens, so a page needs neither component CSS
+   nor a CSS framework. An older page that also links basecoat gets these
+   rules after it, over the same properties. */
+button, input, select, textarea { font: inherit; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px);
+  background: var(--accent); color: var(--accent-contrast);
+  font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.btn[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.btn[data-variant="secondary"]:hover { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
+.btn[data-variant="outline"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn[data-variant="ghost"] { background: transparent; color: var(--text); }
+.btn[data-variant="outline"]:hover, .btn[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.btn[data-variant="destructive"] { background: var(--danger); color: var(--bg); }
+.btn[data-variant="destructive"]:hover { background: color-mix(in srgb, var(--danger) 86%, var(--text)); }
+.btn[data-variant="link"] { height: auto; padding: 0; background: none; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="sm"] { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn[data-size="lg"] { height: 42px; padding: 0 20px; font-size: 15px; }
+.btn[data-size="icon"] { width: 36px; padding: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 1px solid transparent; border-radius: 999px; background: var(--accent); color: var(--accent-contrast);
+  font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap;
+}
+.badge[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.badge[data-variant="outline"] { background: transparent; color: var(--text); border-color: var(--border); }
+.badge[data-variant="destructive"] { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
+
+.alert {
+  display: grid; gap: 4px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+.alert h2, .alert h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.alert p, .alert section { margin: 0; color: var(--text-muted); }
+.alert[data-variant="destructive"] { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); color: var(--danger); }
+
+.card {
+  display: flex; flex-direction: column; gap: 16px; padding: 20px 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.card > header, .card > section, .card > footer { padding: 0 20px; }
+.card > header { display: grid; gap: 4px; }
+.card > header h2, .card > header h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.3; }
+.card > header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+.card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.input {
+  width: 100%; min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field [role="alert"] { color: var(--danger); font-size: 13px; }
+
+dialog.dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: auto; padding: 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+dialog.dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog.dialog > div { display: grid; gap: 16px; padding: 24px; }
+dialog.dialog header { display: grid; gap: 4px; }
+dialog.dialog header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+dialog.dialog header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+dialog.dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+.tabs { display: grid; gap: 12px; }
+.tabs > [role="tablist"] {
+  display: inline-flex; gap: 4px; width: fit-content; max-width: 100%; padding: 4px; overflow-x: auto;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--text) 6%, var(--surface));
+}
+.tabs [role="tab"] {
+  padding: 6px 12px; border: 0; border-radius: calc(var(--radius) - 4px); background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+.tabs [role="tab"][aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.tabs [role="tabpanel"][hidden] { display: none; }
+
+.accordion > details { border-bottom: 1px solid var(--border); }
+.accordion > details > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; font-weight: 500; list-style: none; cursor: pointer;
+}
+.accordion > details > summary::-webkit-details-marker { display: none; }
+.accordion > details > summary::after { content: "+"; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.accordion > details[open] > summary::after { content: "\2212"; }
+.accordion > details > :not(summary) { margin: 0 0 14px; color: var(--text-muted); }
+
+.toaster {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column-reverse; gap: 8px;
+  width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+.toaster .toast { pointer-events: auto; transition: opacity 200ms ease, transform 200ms ease; }
+.toaster .toast[aria-hidden="true"] { opacity: 0; transform: translateY(8px); }
+.toaster .toast-content {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 13px;
+}
+.toaster .toast-content h2 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+.toaster .toast-content p { margin: 0; color: var(--text-muted); }
+
+/* skipUI building blocks. */
+.skip-table-search { max-width: 320px; margin-bottom: 12px; }
+.skip-table-wrap { overflow-x: auto; }
+table.shell-table th[data-sort] { cursor: pointer; user-select: none; }
+table.shell-table th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 9px; }
+table.shell-table th[aria-sort="descending"]::after { content: " \25BC"; font-size: 9px; }
+table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: center; padding: 24px 0; }
+.skip-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.toaster .toast[data-type="success"] .toast-content { border-left: 3px solid var(--success); }
+.toaster .toast[data-type="error"] .toast-content { border-left: 3px solid var(--danger); }
+
+</style>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); },
+    compact: function (v) { return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(v); },
+    brlCompact: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisLabels formats the five y-axis ticks in the unit the chart declared
+  // (percent, BRL or plain numbers), compact so long values never clip, with
+  // the fewest decimals that still print every tick exactly (1,5 mi, not 2 mi).
+  function axisLabels(format, ticks) {
+    function at(digits) {
+      var opts = { notation: "compact", maximumFractionDigits: digits };
+      if (format === "pct") opts = { style: "percent", maximumFractionDigits: digits };
+      else if (format === "brl") opts = { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: digits };
+      var nf = new Intl.NumberFormat("pt-BR", opts);
+      return ticks.map(function (t) { return nf.format(t); });
+    }
+    for (var digits = 0; digits < 2; digits++) {
+      if (at(digits).join("|") === at(digits + 1).join("|")) return at(digits);
+    }
+    return at(2);
+  }
+
+  // yAxisPad formats the ticks and measures the left padding they need from
+  // the longest one; drawYAxis then draws the grid and the labels.
+  function yAxisPad(format, max) {
+    var labels = axisLabels(format, [0, max / 4, max / 2, (max * 3) / 4, max]);
+    var longest = labels.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
+    return { labels: labels, padL: Math.max(40, Math.round(longest * 6.2) + 14) };
+  }
+  function drawYAxis(svg, axis, W, padR, padT, plotH) {
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: axis.padL, y1: gy, x2: W - padR, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: axis.padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axis.labels[g];
+      svg.appendChild(lbl);
+    }
+  }
+
+  // xLabelStep: show every k-th category label so labels never overlap, and
+  // always the last one (counted back from the end).
+  function xLabelStep(labels, step) {
+    var longest = labels.reduce(function (m, l) { return Math.max(m, String(l).length); }, 0);
+    return Math.max(1, Math.ceil((longest * 6.4 + 8) / Math.max(step, 1)));
+  }
+  function drawXLabel(svg, text, x, y, W, edgeGuard) {
+    var anchor = "middle";
+    var half = String(text).length * 3.2;
+    if (edgeGuard && x - half < 4) anchor = "start";
+    if (edgeGuard && x + half > W - 4) anchor = "end";
+    var tx = svgEl("text", { x: x, y: y, "text-anchor": anchor, "font-size": 11, fill: mutedColor() });
+    tx.textContent = text;
+    svg.appendChild(tx);
+  }
+  // categoryLines fits a bar's category name in its slot: one line, two lines
+  // split at a space, or cut with "…". A bar without its name can't be read, so
+  // categories are never skipped; null when the slot is too narrow for that.
+  function categoryLines(text, slot) {
+    var fit = Math.floor((slot - 6) / 6.4);
+    var s = String(text);
+    if (fit < 4) return null;
+    if (s.length <= fit) return [s];
+    var cut = function (t) { return t.length <= fit ? t : t.slice(0, fit - 1).trimEnd() + "…"; };
+    var best = -1;
+    for (var i = 0; i < s.length; i++) {
+      if (s[i] === " " && (best < 0 || Math.abs(s.length / 2 - i) < Math.abs(s.length / 2 - best))) best = i;
+    }
+    if (best < 0) return [cut(s)];
+    return [cut(s.slice(0, best)), cut(s.slice(best + 1))];
+  }
+  function legend(el, items) {
+    var box = document.createElement("div");
+    box.className = "chart-legend";
+    items.forEach(function (it) {
+      var row = document.createElement("span");
+      var dot = document.createElement("i");
+      dot.style.background = it.color;
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode((it.label || "") + (it.value ? " " : "")));
+      if (it.value) {
+        var v = document.createElement("b");
+        v.textContent = it.value;
+        row.appendChild(v);
+      }
+      box.appendChild(row);
+    });
+    resolve(el).appendChild(box);
+  }
+  var seriesPalette = ["#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4", "#0ea5b7"];
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  // A page's function may return nothing or throw: the chart prints its
+  // number instead of taking the rest of the page script down with it.
+  function coerceFormat(spec) {
+    if (typeof spec === "function") {
+      return function (v) {
+        try {
+          var out = spec(v);
+          return out == null ? "" : String(out);
+        } catch (e) {
+          return fmt.num(v);
+        }
+      };
+    }
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el = resolve(el);
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  // finite reads a chart value as a number, 0 when it is not one (NaN,
+  // Infinity, a stray string), so one bad value cannot blank the axis.
+  function finite(v) {
+    var n = +v;
+    return isFinite(n) ? n : 0;
+  }
+
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values.map(finite)) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // labelsFor pads or trims the category names to the n points drawn: pages
+  // pass labels and values of different lengths, and one throw here loses
+  // every section the page renders after the chart.
+  function labelsFor(cfg, n) {
+    var out = [];
+    for (var i = 0; i < n; i++) out.push(cfg.labels && cfg.labels[i] != null ? String(cfg.labels[i]) : "");
+    return out;
+  }
+
+  // niceMax rounds the scale up so the four grid steps land on round values
+  // (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 × 10^k) and the tick labels read exactly.
+  function niceMax(max) {
+    var raw = max / 4;
+    var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    var res = raw / mag;
+    var steps = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    var nice = steps.filter(function (s) { return s >= res - 1e-9; })[0];
+    return nice * mag * 4;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 12;
+    var max = niceMax(maxOf(cfg.values));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = cfg.values.length;
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var names = labels.map(function (l) { return categoryLines(l, step); });
+    var named = names.every(Boolean);
+    if (named && names.some(function (l) { return l.length > 1; })) padB = 42;
+    var plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    var every = xLabelStep(labels, step);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (finite(v) / max) * plotH);
+      var x = axis.padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: (cfg.colors && cfg.colors[i]) || color });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      if (named) {
+        names[i].forEach(function (text, li) {
+          drawXLabel(svg, text, x + bw / 2, padT + plotH + 18 + li * 13, W, false);
+        });
+      } else if ((n - 1 - i) % every === 0) {
+        drawXLabel(svg, labels[i], x + bw / 2, H - 10, W, false);
+      }
+    });
+  }
+
+  // line(el, {labels:[], values:[] | series:[{label, values, color?}], color?, format?})
+  // — one line, or several series on one scale with a legend under the chart.
+  function line(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 16;
+    var series = cfg.series && cfg.series.length
+      ? cfg.series
+      : [{ label: "", values: cfg.values || [], color: cfg.color }];
+    var all = [];
+    series.forEach(function (s) { all = all.concat(s.values || []); });
+    var max = niceMax(maxOf(all));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = series.reduce(function (m, s) { return Math.max(m, (s.values || []).length); }, 0);
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR, plotH = H - padT - padB;
+    var f = coerceFormat(cfg.format);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    var xs = labels.map(function (_, i) { return axis.padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1)); });
+    var every = xLabelStep(labels, n > 1 ? plotW / (n - 1) : plotW);
+    labels.forEach(function (label, i) {
+      if ((n - 1 - i) % every === 0) drawXLabel(svg, label, xs[i], H - 10, W, true);
+    });
+    var colors = series.map(function (s, si) {
+      return s.color || (si === 0 ? (cfg.color || accent()) : seriesPalette[(si - 1) % seriesPalette.length]);
+    });
+    series.forEach(function (s, si) {
+      var color = colors[si];
+      var pts = (s.values || []).map(function (v, i) { return [xs[i], padT + plotH - (finite(v) / max) * plotH]; });
+      var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+      svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+      pts.forEach(function (p, i) {
+        var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+        var t = svgEl("title", {});
+        t.textContent = (s.label ? s.label + " · " : "") + labels[i] + ": " + f(s.values[i]);
+        c.appendChild(t);
+        svg.appendChild(c);
+      });
+    });
+    if (series.length > 1) {
+      legend(el, series.map(function (s, si) { return { label: s.label, color: colors[si] }; }));
+    }
+  }
+
+  // donut(el, {labels:[], values:[], colors?, format?, center?, centerLabel?, legend?})
+  // — donut with a short total in the centre (compact, in the declared unit)
+  // and, with legend: true, the labels and shares listed under it.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    // At 100% of a wide container the donut outgrows the height pages give
+    // the box and spills over the next section: keep it at its own size.
+    svg.style.maxWidth = W + "px";
+    svg.style.margin = "0 auto";
+    var values = cfg.values.map(finite);
+    var labels = labelsFor(cfg, values.length);
+    var sum = values.reduce(function (a, b) { return a + b; }, 0);
+    var total = sum || 1;
+    var palette = cfg.colors || [accent()].concat(seriesPalette);
+    // The hover keeps the full value; the centre has room for a short one.
+    var full = coerceFormat(cfg.format);
+    var short = typeof cfg.format === "function" ? full : cfg.format === "brl" ? fmt.brlCompact : fmt.compact;
+    var a0 = -Math.PI / 2;
+    values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + full(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    // A share chart has no total worth printing: without its own centre text
+    // the caption alone takes the middle.
+    var text = cfg.center != null ? String(cfg.center) : (cfg.format === "pct" ? "" : short(sum));
+    if (text) {
+      var size = text.length > 9 ? 14 : text.length > 7 ? 17 : 20;
+      var center = svgEl("text", { x: cx, y: cfg.centerLabel ? cy + 1 : cy + 6, "text-anchor": "middle", "font-size": size, "font-weight": 650, fill: "currentColor" });
+      center.textContent = text;
+      svg.appendChild(center);
+    }
+    if (cfg.centerLabel) {
+      var cap = svgEl("text", { x: cx, y: text ? cy + 19 : cy + 5, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      cap.textContent = cfg.centerLabel;
+      svg.appendChild(cap);
+    }
+    if (cfg.legend) {
+      legend(el, labels.map(function (label, i) {
+        return { label: label, color: palette[i % palette.length], value: fmt.pct(values[i] / total) };
+      }));
+    }
+  }
+
+  // ---- Page building blocks: what dashboards and small systems kept
+  // re-implementing — a searchable sortable table, a KPI row, tabs, toasts,
+  // dialogs, saved state and mock data. Every call is opt-in, so a page that
+  // brings its own versions keeps them.
+
+  function resolve(target) {
+    return typeof target === "string" ? document.querySelector(target) : target;
+  }
+
+  function node(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function isNumberColumn(col) {
+    return col.align === "right" || col.format === "num" || col.format === "brl" || col.format === "pct";
+  }
+
+  function cellText(col, row) {
+    var value = row[col.key];
+    if (value == null) return "";
+    return col.format ? coerceFormat(col.format)(value) : String(value);
+  }
+
+  function compareValues(a, b) {
+    if (typeof a === "number" && typeof b === "number") return a - b;
+    return String(a == null ? "" : a).localeCompare(String(b == null ? "" : b), "pt-BR", { numeric: true });
+  }
+
+  // table(el, {columns, rows, search?, pageSize?, empty?, onRowClick?}) — a
+  // table.shell-table with sortable headers, an optional search box and
+  // pager. A column is {key, label, format?, align?, sortable? (true),
+  // render?(value, row) returning a Node or an HTML string — the page writes
+  // its cell templates as markup}. Plain values are always set as text.
+  // Returns {setRows, rows}.
+  function table(target, cfg) {
+    var root = resolve(target);
+    var cols = cfg.columns || [];
+    var pageSize = cfg.pageSize || 0;
+    var state = { rows: (cfg.rows || []).slice(), query: "", key: null, dir: 1, page: 0 };
+    root.innerHTML = "";
+    if (cfg.search) {
+      var search = node("input", "input skip-table-search");
+      search.type = "search";
+      search.placeholder = typeof cfg.search === "string" ? cfg.search : "Buscar…";
+      search.setAttribute("aria-label", search.placeholder);
+      search.addEventListener("input", function () {
+        state.query = search.value.trim().toLowerCase();
+        state.page = 0;
+        draw();
+      });
+      root.appendChild(search);
+    }
+    var tableEl = node("table", "shell-table");
+    var headRow = node("tr");
+    var heads = cols.map(function (col) {
+      var th = node("th", isNumberColumn(col) ? "num" : "", col.label == null ? col.key : col.label);
+      th.scope = "col";
+      if (col.sortable !== false) {
+        var toggle = function () {
+          state.dir = state.key === col.key ? -state.dir : 1;
+          state.key = col.key;
+          draw();
+        };
+        th.setAttribute("data-sort", col.key);
+        th.tabIndex = 0;
+        th.addEventListener("click", toggle);
+        th.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+      }
+      headRow.appendChild(th);
+      return th;
+    });
+    var thead = node("thead");
+    var tbody = node("tbody");
+    var wrap = node("div", "skip-table-wrap");
+    var pager = node("div", "skip-pager");
+    thead.appendChild(headRow);
+    tableEl.appendChild(thead);
+    tableEl.appendChild(tbody);
+    wrap.appendChild(tableEl);
+    root.appendChild(wrap);
+    if (pageSize) root.appendChild(pager);
+
+    function visibleRows() {
+      var rows = state.rows;
+      if (state.query) {
+        rows = rows.filter(function (row) {
+          return cols.some(function (col) { return cellText(col, row).toLowerCase().indexOf(state.query) >= 0; });
+        });
+      }
+      if (state.key) {
+        var key = state.key, dir = state.dir;
+        rows = rows.slice().sort(function (a, b) { return dir * compareValues(a[key], b[key]); });
+      }
+      return rows;
+    }
+
+    function drawRow(row) {
+      var tr = node("tr");
+      cols.forEach(function (col) {
+        var td = node("td", isNumberColumn(col) ? "num" : "");
+        if (!col.render) {
+          td.textContent = cellText(col, row);
+        } else {
+          var content = col.render(row[col.key], row);
+          if (content instanceof Node) td.appendChild(content);
+          else td.innerHTML = content == null ? "" : String(content);
+        }
+        tr.appendChild(td);
+      });
+      // The row stays a row (no role) and takes focus, so a keyboard reaches
+      // the same action; keys pressed on a control inside a cell are its own.
+      if (cfg.onRowClick) {
+        tr.style.cursor = "pointer";
+        tr.tabIndex = 0;
+        tr.addEventListener("click", function () { cfg.onRowClick(row); });
+        tr.addEventListener("keydown", function (e) {
+          if (e.target !== tr || (e.key !== "Enter" && e.key !== " ")) return;
+          e.preventDefault();
+          cfg.onRowClick(row);
+        });
+      }
+      return tr;
+    }
+
+    function pagerButton(label, disabled, step) {
+      var button = node("button", "btn", label);
+      button.type = "button";
+      button.setAttribute("data-variant", "outline");
+      button.setAttribute("data-size", "sm");
+      button.disabled = disabled;
+      button.addEventListener("click", function () { state.page += step; draw(); });
+      return button;
+    }
+
+    function draw() {
+      var rows = visibleRows();
+      heads.forEach(function (th, i) {
+        if (cols[i].key === state.key) th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      var pages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+      state.page = Math.min(state.page, pages - 1);
+      var shown = pageSize ? rows.slice(state.page * pageSize, (state.page + 1) * pageSize) : rows;
+      tbody.innerHTML = "";
+      if (!shown.length) {
+        var empty = node("td", "skip-table-empty", cfg.empty || "Nenhum registro encontrado.");
+        empty.colSpan = cols.length;
+        tbody.appendChild(node("tr")).appendChild(empty);
+      }
+      shown.forEach(function (row) { tbody.appendChild(drawRow(row)); });
+      if (!pageSize) return;
+      pager.innerHTML = "";
+      var from = rows.length ? state.page * pageSize + 1 : 0;
+      pager.appendChild(node("span", "", from + "–" + Math.min(rows.length, (state.page + 1) * pageSize) + " de " + rows.length));
+      var nav = node("div", "row gap-2");
+      nav.appendChild(pagerButton("Anterior", state.page === 0, -1));
+      nav.appendChild(pagerButton("Próxima", state.page >= pages - 1, 1));
+      pager.appendChild(nav);
+    }
+
+    draw();
+    return {
+      setRows: function (rows) { state.rows = rows.slice(); draw(); },
+      rows: visibleRows
+    };
+  }
+
+  // kpis(el, [{label, value, format?, delta?, hint?}]) — KPI cards in a
+  // responsive grid; delta is a fraction (0.12 renders as ▲ 12%).
+  function kpis(target, items) {
+    var root = resolve(target);
+    root.innerHTML = "";
+    root.classList.add("shell-grid");
+    items.forEach(function (item) {
+      var card = node("div", "panel kpi");
+      card.appendChild(node("span", "kpi-label", item.label));
+      // Large money values go compact ("R$ 27,5 mi"): the full amount does
+      // not fit a KPI card at four per row.
+      var kpiFormat = item.format === "brl" && Math.abs(item.value) >= 1e6 ? fmt.brlCompact : (item.format ? coerceFormat(item.format) : null);
+      card.appendChild(node("span", "kpi-value", kpiFormat ? kpiFormat(item.value) : String(item.value)));
+      if (typeof item.delta === "number") {
+        var up = item.delta >= 0;
+        card.appendChild(node("span", "kpi-delta " + (up ? "up" : "down"), (up ? "▲ " : "▼ ") + fmt.pct(Math.abs(item.delta))));
+      }
+      if (item.hint) card.appendChild(node("span", "kpi-label", item.hint));
+      root.appendChild(card);
+    });
+  }
+
+  // badge(text, variant?) — a .badge node for table cells and lists;
+  // variant is "secondary" | "outline" | "destructive" (default: primary).
+  function badge(text, variant) {
+    var el = node("span", "badge", text);
+    if (variant) el.setAttribute("data-variant", variant);
+    return el;
+  }
+
+  // tabs(el) — wires one .tabs block: [role=tab] buttons inside
+  // [role=tablist], each with aria-controls naming its [role=tabpanel].
+  function tabs(target) {
+    var root = resolve(target);
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(chosen) {
+      buttons.forEach(function (b) {
+        var on = b === chosen;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(b.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+      });
+    });
+    select(buttons.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || buttons[0]);
+  }
+
+  // toast(message, {type?: "success" | "error", title?, duration?}) — a
+  // .toast in a shared .toaster at the bottom of the page.
+  function toast(message, opts) {
+    opts = opts || {};
+    var toaster = document.querySelector(".toaster") || document.body.appendChild(node("div", "toaster"));
+    var item = node("div", "toast");
+    item.setAttribute("role", opts.type === "error" ? "alert" : "status");
+    item.setAttribute("aria-hidden", "true");
+    if (opts.type) item.setAttribute("data-type", opts.type);
+    var content = node("div", "toast-content");
+    var section = node("section");
+    if (opts.title) section.appendChild(node("h2", "", opts.title));
+    section.appendChild(node("p", "", message));
+    content.appendChild(section);
+    item.appendChild(content);
+    toaster.appendChild(item);
+    requestAnimationFrame(function () { item.setAttribute("aria-hidden", "false"); });
+    setTimeout(function () {
+      item.setAttribute("aria-hidden", "true");
+      setTimeout(function () { item.remove(); }, 400);
+    }, opts.duration || 3000);
+  }
+
+  // Dialogs are native <dialog class="dialog">: a [data-dialog-open="id"]
+  // anywhere opens one, a [data-dialog-close] inside closes it, and a click on
+  // its backdrop closes it too. Plain dialog.showModal()/close() still work.
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!(target instanceof Element)) return;
+    var opener = target.closest("[data-dialog-open]");
+    if (opener) {
+      var dialog = document.getElementById(opener.getAttribute("data-dialog-open"));
+      if (dialog && dialog.showModal && !dialog.open) dialog.showModal();
+      return;
+    }
+    var closer = target.closest("[data-dialog-close]");
+    if (closer && closer.closest("dialog")) {
+      closer.closest("dialog").close();
+      return;
+    }
+    if (target.tagName === "DIALOG" && target.classList.contains("dialog") && target.open) target.close();
+  });
+
+  // store(key, fallback) — JSON state in localStorage that never throws (a
+  // private window or a full quota falls back to memory): {get, set, update}.
+  function store(key, fallback) {
+    var memory;
+    // Set while the last write did not reach localStorage: what is stored
+    // there is older than memory until a write goes through again.
+    var unsaved = false;
+    var initial = function () { return fallback === undefined ? undefined : JSON.parse(JSON.stringify(fallback)); };
+    function get() {
+      if (!unsaved) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (raw != null) return JSON.parse(raw);
+        } catch (e) { /* storage unavailable: memory below */ }
+      }
+      return memory !== undefined ? memory : initial();
+    }
+    function set(value) {
+      memory = value;
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        unsaved = false;
+      } catch (e) {
+        unsaved = true;
+      }
+      return value;
+    }
+    return { get: get, set: set, update: function (fn) { return set(fn(get())); } };
+  }
+
+  // mock — seeded random data, so a page asks for 90 days of numbers in one
+  // line instead of writing them out; the same seed gives the same data.
+  var FIRST = ["Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+    "Larissa", "Marcos", "Natália", "Otávio", "Paula", "Rafael", "Sofia", "Thiago", "Vanessa", "Lucas"];
+  var LAST = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima",
+    "Araújo", "Fernandes", "Carvalho", "Gomes", "Martins", "Rocha", "Ribeiro", "Barbosa"];
+  var INITIALS = "ABCDEFGHIJLMNOPRSTV".split("");
+  var CITIES = ["São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", "Curitiba, PR", "Porto Alegre, RS",
+    "Salvador, BA", "Recife, PE", "Fortaleza, CE", "Brasília, DF", "Goiânia, GO", "Campinas, SP", "Florianópolis, SC",
+    "Manaus, AM", "Belém, PA", "Vitória, ES", "Natal, RN"];
+
+  function createMock(seed) {
+    var state = seed >>> 0;
+    var names = 0;
+    function random() {
+      state = (state + 0x6d2b79f5) >>> 0;
+      var t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function int(min, max) { return min + Math.floor(random() * (max - min + 1)); }
+    function pick(list) { return list[Math.floor(random() * list.length)]; }
+    var mock = {
+      seed: function (value) { state = value >>> 0; names = 0; return mock; },
+      random: random,
+      int: int,
+      float: function (min, max, decimals) {
+        var factor = Math.pow(10, decimals == null ? 2 : decimals);
+        return Math.round((min + random() * (max - min)) * factor) / factor;
+      },
+      pick: pick,
+      chance: function (p) { return random() < p; },
+      // There are 360 first/last pairs. A page that draws until the name is
+      // new (do { … } while (used.has(name))) froze the tab past them, so
+      // later draws widen the space: a second surname after 200 (6,480), a
+      // middle initial after 4,000.
+      name: function () {
+        names++;
+        var middle = names > 4000 ? pick(INITIALS) + ". " : "";
+        return pick(FIRST) + " " + middle + (names > 200 ? pick(LAST) + " " : "") + pick(LAST);
+      },
+      city: function () { return pick(CITIES); },
+      // series(n, {start, trend, noise, min, decimals}) — a walk: each value
+      // moves by trend (fraction per step) plus up to ±noise of itself.
+      series: function (n, opts) {
+        opts = opts || {};
+        var value = opts.start == null ? 100 : opts.start;
+        var factor = Math.pow(10, opts.decimals || 0);
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          out.push(Math.max(opts.min == null ? 0 : opts.min, Math.round(value * factor) / factor));
+          value = value * (1 + (opts.trend || 0)) * (1 + (random() * 2 - 1) * (opts.noise == null ? 0.08 : opts.noise));
+        }
+        return out;
+      },
+      // dates(n, {end?, step?: "day" | "week" | "month"}) — ISO dates
+      // (YYYY-MM-DD), oldest first, ending at end (default: today).
+      dates: function (n, opts) {
+        opts = opts || {};
+        var end = opts.end ? new Date(opts.end) : new Date();
+        var out = [];
+        for (var i = n - 1; i >= 0; i--) {
+          var d = new Date(end.getTime());
+          if (opts.step === "month") d.setMonth(d.getMonth() - i);
+          else d.setDate(d.getDate() - i * (opts.step === "week" ? 7 : 1));
+          out.push(d.toISOString().slice(0, 10));
+        }
+        return out;
+      },
+      // rows(n, spec) — n objects; each spec value is a function(i), a list
+      // to pick from, or a constant.
+      rows: function (n, spec) {
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          var row = {};
+          for (var key in spec) {
+            var value = spec[key];
+            row[key] = typeof value === "function" ? value(i) : Array.isArray(value) ? pick(value) : value;
+          }
+          out.push(row);
+        }
+        return out;
+      }
+    };
+    return mock;
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+  window.skipUI = { table: table, kpis: kpis, badge: badge, tabs: tabs, toast: toast };
+  window.skipStore = store;
+  window.skipMock = createMock(20261022);
+})();
+
+</script>
+<style>
+:root {
+--accent: #2c4a72;
+--accent-contrast: #ffffff;
+}
+body { background: #f4f6f9; color: #16202e; }
+.bp-wrap { max-width: 1040px; margin: 0 auto; padding: 16px; }
+.bp-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 10px rgba(22,32,46,.08); padding: 20px; }
+.bp-hidden { display: none !important; }
+.bp-header { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; padding: 8px 0 16px; }
+.bp-title { font-size: 1.6rem; font-weight: 700; margin: 0; color: #16202e; }
+.bp-sub { color: #4a5568; margin: 4px 0 0; font-size: .95rem; }
+.bp-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.bp-btn { border: 1px solid #2c4a72; background: #2c4a72; color: #fff; padding: 9px 16px; border-radius: 10px; cursor: pointer; font-size: .95rem; transition: transform .15s, box-shadow .15s; }
+.bp-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(44,74,114,.25); }
+.bp-btn:focus-visible, .bp-tab:focus-visible, .bp-scale button:focus-visible, .bp-nav-item:focus-visible { outline: 3px solid #2c4a72; outline-offset: 2px; }
+.bp-btn.ghost { background: #fff; color: #2c4a72; }
+.bp-btn.saved { background: #1d5a33; border-color: #1d5a33; }
+.bp-saved-note { font-size: .8rem; color: #4a5568; margin-left: 6px; font-weight: 400; }
+.bp-btn.danger { background: #fff; color: #9b2c2c; border-color: #9b2c2c; }
+.bp-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.bp-pill { display: inline-block; background: #e6ecf5; color: #2c4a72; border-radius: 999px; padding: 4px 12px; font-size: .8rem; font-weight: 600; margin: 2px; }
+.bp-pill.neutral { background: #eef1f5; color: #4a5568; }
+.bp-eyebrow { display: inline-block; background: #e6ecf5; color: #2c4a72; border-radius: 999px; padding: 4px 12px; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.bp-muted { color: #4a5568; font-size: .9rem; }
+.bp-footer { text-align: center; color: #4a5568; font-size: .85rem; padding: 24px 0 8px; }
+.bp-hero-kpi { text-align: center; background: linear-gradient(180deg, #eef3fa, #fff); border-radius: 14px; padding: 22px; }
+.bp-kpi-label { text-transform: uppercase; font-size: .75rem; letter-spacing: .08em; color: #4a5568; font-weight: 700; }
+.bp-kpi-value { font-size: 2.2rem; font-weight: 800; color: #2c4a72; margin: 6px 0; }
+.bp-grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.bp-grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 720px) { .bp-grid-2 { grid-template-columns: 1fr 1fr; } .bp-grid-3 { grid-template-columns: repeat(3, 1fr); } }
+.bp-section-title { font-size: 1.1rem; font-weight: 700; margin: 0 0 4px; }
+.bp-progress { height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+.bp-progress > div { height: 100%; background: #2c4a72; width: 0; transition: width .3s ease; }
+.bp-qcard { animation: bpFade .25s ease; }
+@keyframes bpFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.bp-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 16px; }
+.bp-scale button { border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; padding: 10px 4px; cursor: pointer; font-size: .78rem; color: #16202e; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: background .15s, border-color .15s; }
+.bp-scale button b { font-size: 1.05rem; }
+.bp-scale button .bp-short { display: none; }
+@media (max-width: 520px) {
+.bp-scale button .bp-full { display: none; }
+.bp-scale button .bp-short { display: inline; }
+}
+.bp-scale button:hover { border-color: #2c4a72; }
+.bp-scale button.sel { background: #2c4a72; color: #fff; border-color: #2c4a72; }
+.bp-scale-ends { display: flex; justify-content: space-between; font-size: .8rem; color: #4a5568; margin-top: 6px; }
+.bp-nav-row { display: flex; justify-content: space-between; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.bp-qtext { font-size: 1.2rem; line-height: 1.5; margin: 12px 0 0; font-weight: 500; }
+.bp-chip { display: inline-block; background: #eef1f5; color: #2c4a72; border-radius: 6px; padding: 3px 10px; font-size: .78rem; font-weight: 600; }
+.bp-warn { background: #fff7e6; border: 1px solid #f0c36d; color: #6b4a00; border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
+.bp-ok { background: #eaf6ee; border: 1px solid #9fd3b1; color: #1d5a33; border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
+.bp-rev-list { list-style: none; padding: 0; margin: 0; max-height: 460px; overflow: auto; border: 1px solid #e2e8f0; border-radius: 10px; }
+.bp-rev-list li { display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #edf2f7; cursor: pointer; font-size: .9rem; }
+.bp-rev-list li:hover { background: #f5f8fc; }
+.bp-rev-list li:last-child { border-bottom: none; }
+.bp-rev-ans { font-weight: 700; color: #2c4a72; min-width: 28px; text-align: right; }
+.bp-rev-ans.empty { color: #a0aec0; }
+.bp-tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid #e2e8f0; margin-bottom: 16px; }
+.bp-tab { background: none; border: none; padding: 10px 14px; cursor: pointer; color: #4a5568; font-size: .95rem; border-bottom: 3px solid transparent; }
+.bp-tab[aria-selected="true"] { color: #2c4a72; border-bottom-color: #2c4a72; font-weight: 700; }
+.bp-bar-row { margin-bottom: 14px; }
+.bp-bar-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; font-size: .95rem; }
+.bp-bar-track { position: relative; height: 12px; background: #edf2f7; border-radius: 999px; margin-top: 6px; }
+.bp-bar-fill { position: absolute; top: 0; bottom: 0; background: #2c4a72; border-radius: 999px; transition: all .6s ease; }
+.bp-bar-zero { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; background: #718096; }
+.bp-ruler-svg { width: 100%; height: auto; display: block; }
+.bp-ruler-seg { transition: opacity .3s; }
+.bp-hybrid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 720px) { .bp-hybrid { grid-template-columns: repeat(5, 1fr); } }
+.bp-hybrid div { background: #f5f8fc; border-radius: 10px; padding: 10px; font-size: .85rem; }
+.bp-hybrid b { display: block; color: #2c4a72; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.bp-list { margin: 8px 0 0; padding-left: 20px; }
+.bp-list li { margin-bottom: 6px; }
+.bp-author { border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.bp-author.reject { background: #fdf6f6; }
+.bp-author-name { font-weight: 700; }
+.bp-meth h3 { font-size: 1rem; margin: 18px 0 6px; color: #2c4a72; }
+.bp-meth p, .bp-meth li { font-size: .93rem; line-height: 1.6; }
+.bp-view { animation: bpFade .3s ease; }
+.bp-dialog { border: none; border-radius: 14px; padding: 0; max-width: 440px; width: calc(100% - 32px); box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+.bp-dialog::backdrop { background: rgba(22,32,46,.45); }
+.bp-dialog-body { padding: 22px; }
+.bp-dialog-body h2 { margin: 0 0 8px; font-size: 1.2rem; }
+.bp-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.bp-scatter-wrap { max-width: 340px; margin: 0 auto; }
+.bp-coh { font-weight: 700; }
+.bp-keys { font-size: .8rem; color: #4a5568; }
+@media (max-width: 520px) {
+.bp-scale { gap: 4px; }
+.bp-scale button { font-size: .7rem; min-height: 56px; }
+.bp-title { font-size: 1.3rem; }
+.bp-kpi-value { font-size: 1.8rem; }
+}
+@media print {
+.no-print, .bp-header .bp-actions, .bp-tabs, .bp-footer, .bp-nav-row, .bp-dialog, .shell-footer, #btnBackHome, #btnBackHome2, #btnReset2, .bp-tabs button { display: none !important; }
+body { background: #fff !important; }
+.bp-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+.bp-tab-panel { display: block !important; }
+.bp-tab-panel.bp-hidden { display: block !important; }
+.bp-wrap { max-width: 100%; padding: 0; }
+}
+</style>
+</head>
+<body>
+<div class="bp-wrap">
+
+<header class="bp-header no-print">
+<div>
+<span class="bp-eyebrow">Autoconhecimento político</span>
+<h1 class="bp-title">Bússola Política e Filosófica</h1>
+<p class="bp-sub">Um questionário de 100 perguntas que mapeia sua posição em seis eixos e numa régua esquerda-direita.</p>
+</div>
+<div class="bp-actions">
+<button class="bp-btn ghost" id="btnHome" type="button">Início</button>
+<button class="bp-btn danger" id="btnReset" type="button">Reiniciar</button>
+</div>
+</header>
+
+<!-- INTRO -->
+<section id="viewIntro" class="bp-view">
+<div class="bp-card">
+<h2 class="bp-section-title">Antes de começar</h2>
+<p class="bp-muted">Responda cada afirmação com o grau em que você concorda. Não há respostas certas: o objetivo é descrever tendências do seu pensamento político e filosófico.</p>
+<h3 class="bp-section-title" style="margin-top:18px">Escala de resposta</h3>
+<p class="bp-muted">1 Discordo totalmente · 2 Discordo · 3 Neutro / depende / não tenho posição definida · 4 Concordo · 5 Concordo totalmente.</p>
+<p class="bp-muted">A escala de 5 níveis reduz a fadiga e acelera a resposta, preservando a distinção entre convicção forte (totalmente) e posição moderada (parcialmente) e o centro neutro.</p>
+<div class="bp-warn" style="margin-top:14px">Esta ferramenta é um instrumento interpretativo de autoconhecimento, não um diagnóstico. Uma mesma pessoa pode se situar de formas diferentes conforme o tema e o momento.</div>
+<div class="bp-nav-row">
+<span id="introSaved" class="bp-pill neutral">Nenhum progresso salvo</span>
+<div class="bp-actions">
+<button class="bp-btn ghost" id="btnContinue" type="button" hidden>Continuar de onde parei</button>
+<button class="bp-btn" id="btnStart" type="button">Iniciar questionário</button>
+</div>
+</div>
+<div class="bp-actions" id="savedWrap" style="margin-top:14px" hidden>
+<button class="bp-btn saved" id="btnViewSaved" type="button">Consultar meu resultado salvo <span class="bp-saved-note" id="savedDate"></span></button>
+</div>
+</div>
+</section>
+
+<!-- QUIZ -->
+<section id="viewQuiz" class="bp-view bp-hidden">
+<div class="bp-card">
+<div class="row between items-center" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+<span class="bp-pill" id="quizCounter">1/100</span>
+<span class="bp-keys no-print">Atalhos: teclas 1 a 5 · setas ← → navegam · Enter avança</span>
+</div>
+<div class="bp-progress" style="margin-top:10px" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="quizProgressWrap"><div id="quizProgress"></div></div>
+<div class="bp-qcard" id="qCard" style="margin-top:18px">
+<span class="bp-chip" id="qChip">Economia</span>
+<p class="bp-qtext" id="qText"></p>
+<div class="bp-scale" id="qScale" role="group" aria-label="Escala de resposta de 1 a 5"></div>
+</div>
+<div class="bp-nav-row">
+<button class="bp-btn ghost" id="btnPrev" type="button">Anterior</button>
+<div class="bp-actions">
+<button class="bp-btn ghost" id="btnToReview" type="button">Ver revisão</button>
+<button class="bp-btn" id="btnNext" type="button">Próxima</button>
+</div>
+</div>
+<p class="bp-muted" id="quizHint" style="margin-top:10px"></p>
+</div>
+</section>
+
+<!-- REVIEW -->
+<section id="viewReview" class="bp-view bp-hidden">
+<div class="bp-card">
+<h2 class="bp-section-title">Revisão das respostas</h2>
+<p class="bp-muted">Clique em uma pergunta para voltar a ela e alterar a resposta.</p>
+<div class="bp-pill" id="revAnswered" style="margin-top:12px">0 respondidas</div>
+<span class="bp-pill neutral" id="revNeutral">0 neutras</span>
+<span class="bp-pill neutral" id="revMissing">100 não respondidas</span>
+<div style="margin-top:14px">
+<input class="bp-filter-input" id="revFilter" type="search" placeholder="Filtrar pelo texto da pergunta" aria-label="Filtrar perguntas" style="width:100%;padding:10px 12px;border:1px solid #cbd5e0;border-radius:10px;font-size:.95rem">
+</div>
+<ul class="bp-rev-list" id="revList" style="margin-top:12px"></ul>
+<div class="bp-nav-row">
+<button class="bp-btn ghost" id="btnBackQuiz" type="button">Voltar ao questionário</button>
+<button class="bp-btn" id="btnFinish" type="button">Finalizar e calcular</button>
+</div>
+<div id="revWarn" class="bp-warn bp-hidden" style="margin-top:12px"></div>
+</div>
+</section>
+
+<!-- RESULT -->
+<section id="viewResult" class="bp-view bp-hidden">
+<div class="bp-card" style="margin-bottom:16px">
+<div class="bp-actions no-print" style="justify-content:flex-end;margin-bottom:10px">
+<button class="bp-btn ghost" id="btnBackHome2" type="button" data-size="sm" style="padding:6px 12px;font-size:.85rem">Voltar ao início</button>
+</div>
+<div id="resHero" class="bp-hero-kpi"></div>
+</div>
+<div class="bp-card">
+<div class="bp-tabs" role="tablist" aria-label="Seções do resultado">
+<button class="bp-tab" role="tab" aria-selected="true" aria-controls="tabOverview" id="tOverview" type="button">Visão geral</button>
+<button class="bp-tab" role="tab" aria-selected="false" aria-controls="tabProfiles" id="tProfiles" type="button">Perfis</button>
+<button class="bp-tab" role="tab" aria-selected="false" aria-controls="tabAuthors" id="tAuthors" type="button">Autores &amp; correntes</button>
+<button class="bp-tab" role="tab" aria-selected="false" aria-controls="tabMethod" id="tMethod" type="button">Metodologia</button>
+</div>
+
+<!-- Overview -->
+<div id="tabOverview" class="bp-tab-panel" role="tabpanel">
+<div class="bp-grid-2">
+<div>
+<span class="bp-eyebrow">Classificação interpretativa</span>
+<h2 class="bp-section-title" id="resMainType" style="margin-top:8px"></h2>
+<div id="resSecondary"></div>
+<p class="bp-muted" style="margin-top:8px">Classificação interpretativa, não diagnóstico.</p>
+</div>
+<div>
+<h3 class="bp-section-title">Régua esquerda-direita</h3>
+<p class="bp-muted">Resumo de 5 eixos, com economia pesando mais.</p>
+<div id="rulerWrap"></div>
+</div>
+</div>
+<h3 class="bp-section-title" style="margin-top:22px">Por que esta posição</h3>
+<p class="bp-muted">Os eixos que mais empurraram sua posição e a proximidade de faixas vizinhas.</p>
+<div id="whyBox" style="margin-top:8px"></div>
+<h3 class="bp-section-title" style="margin-top:22px">Linha-híbrido</h3>
+<p class="bp-muted">Leitura resumida de cada dimensão.</p>
+<div class="bp-hybrid" id="hybridLine" style="margin-top:8px"></div>
+<h3 class="bp-section-title" style="margin-top:22px">Resumo interpretativo</h3>
+<p class="bp-muted">Texto gerado a partir das suas respostas.</p>
+<div id="summaryBox" style="margin-top:8px"></div>
+<h3 class="bp-section-title" style="margin-top:22px">Características predominantes</h3>
+<p class="bp-muted">Os cinco traços mais fortes do seu perfil.</p>
+<ul class="bp-list" id="traitsList"></ul>
+<h3 class="bp-section-title" style="margin-top:22px">Contradições e tensões</h3>
+<p class="bp-muted">Pares de perguntas que se contradizem e padrões recorrentes.</p>
+<div id="tensionsBox" style="margin-top:8px"></div>
+<div class="bp-actions no-print" style="margin-top:22px">
+<button class="bp-btn" id="btnPrint" type="button">Imprimir / salvar PDF</button>
+<button class="bp-btn ghost" id="btnCopy" type="button">Copiar resumo</button>
+<button class="bp-btn ghost" id="btnShare" type="button">Compartilhar no WhatsApp</button>
+<button class="bp-btn danger" id="btnReset2" type="button">Reiniciar</button>
+</div>
+<div class="bp-actions no-print" style="margin-top:12px">
+<button class="bp-btn ghost" id="btnBackHome" type="button">Voltar ao início</button>
+</div>
+</div>
+
+<!-- Profiles -->
+<div id="tabProfiles" class="bp-tab-panel bp-hidden" role="tabpanel">
+<h3 class="bp-section-title">Perfil por eixo</h3>
+<p class="bp-muted">Cada barra vai de -100 (um polo) a +100 (outro polo). A faixa indica a tendência.</p>
+<div id="axisBars" style="margin-top:12px"></div>
+<div class="bp-grid-2" style="margin-top:20px">
+<div>
+<h3 class="bp-section-title">Dispersão Economia × Costumes</h3>
+<p class="bp-muted">Quadrante com seu marcador.</p>
+<div class="bp-scatter-wrap" id="scatterWrap"></div>
+</div>
+<div>
+<h3 class="bp-section-title">Intensidade e consistência</h3>
+<p class="bp-muted">Quão fortes são suas convicções e quão coerentes são as respostas.</p>
+<div id="intensityBox" style="margin-top:10px"></div>
+<div id="consistencyBox" style="margin-top:10px"></div>
+</div>
+</div>
+</div>
+
+<!-- Authors -->
+<div id="tabAuthors" class="bp-tab-panel bp-hidden" role="tabpanel">
+<h3 class="bp-section-title">Autores com maior afinidade</h3>
+<p class="bp-muted">Distância euclidiana entre seu vetor e o do autor, ponderada pelo engajamento de cada eixo. Quanto menor a distância, maior a afinidade.</p>
+<div id="authorsTop" style="margin-top:10px"></div>
+<h3 class="bp-section-title" style="margin-top:20px">Autores mais distantes</h3>
+<p class="bp-muted">Os três com maior distância ponderada ao seu perfil.</p>
+<div id="authorsBottom" style="margin-top:10px"></div>
+<h3 class="bp-section-title" style="margin-top:20px">Correntes políticas próximas</h3>
+<p class="bp-muted">Quatro correntes mais próximas do seu vetor.</p>
+<div id="currentsTop" style="margin-top:10px"></div>
+<h3 class="bp-section-title" style="margin-top:20px">Correntes mais distantes</h3>
+<p class="bp-muted">Três correntes mais afastadas do seu perfil.</p>
+<div id="currentsBottom" style="margin-top:10px"></div>
+<p class="bp-warn" style="margin-top:12px">Fascismo e nazismo só aparecem como próximos quando NAC e AUT do perfil são muito altos. Mesmo assim, são tradições históricas específicas e não sinônimos de direita.</p>
+<h3 class="bp-section-title" style="margin-top:20px">Relação com as tradições intelectuais</h3>
+<p class="bp-muted">Autores mais próximos em cada eixo.</p>
+<div id="traditionsBox" style="margin-top:10px"></div>
+</div>
+
+<!-- Methodology -->
+<div id="tabMethod" class="bp-tab-panel bp-hidden bp-meth" role="tabpanel">
+<h3>Eixos</h3>
+<p>Seis dimensões: ECO (economia), CUL (costumes), AUT (ordem ou liberdade), NAC (nação ou globalismo), INS (preservação ou transformação institucional) e CENT (centralização ou descentralização). Valores de -100 a +100.</p>
+<h3>Cálculo dos eixos</h3>
+<p>Escala de 5 níveis: 1 Discordo totalmente, 2 Discordo, 3 Neutro/depende/sem posição definida, 4 Concordo, 5 Concordo totalmente. Conversão resposta-3 ∈ {-2,-1,0,+1,+2}. Cada pergunta tem uma carga d (eixo e sinal). O escore de cada eixo é a média de d×(resposta-3) somente sobre respostas não-neutras, multiplicada por 50. O neutro (3) é excluído das médias.</p>
+<h3>Engajamento e intensidade</h3>
+<p>Engajamento de um eixo = respostas não-neutras ÷ perguntas do eixo. Intensidade = média de |resposta-3| das não-neutras × 50 (totalmente = 2, parcialmente = 1), indicando convicção forte ou moderada.</p>
+<h3>Régua esquerda-direita</h3>
+<p>Média ponderada de ECO (0,40), CUL (0,25), AUT (0,15), NAC (0,12) e INS (0,08), cada peso multiplicado pelo engajamento e renormalizado. Positivo indica direita. Faixas: ≥60 extrema-direita; 30 a 59 direita; 10 a 29 centro-direita; -9 a 9 centro; -29 a -10 centro-esquerda; -59 a -30 esquerda; ≤-60 extrema-esquerda. Trata-se de um resumo: economia pesa mais, e autoridade e nacionalismo deslocam pouco, pois existem esquerdas autoritárias e nacionalistas.</p>
+<h3>Pares de consistência</h3>
+<p>Pares (58-96), (60-61), (26-28), (55-56), (40-41), (13-45), (79-83). Há tensão quando |(ra-3)+(rb-3)| ≥ 3, isto é, ao menos uma convicção forte combinada com adesão à outra.</p>
+<h3>Regras de classificação composta</h3>
+<ol class="bp-list">
+<li>Monarquista: resposta 32 ≥ 4 e INS ≥ +30.</li>
+<li>Populista: resposta 34 ≥ 4 e resposta 33 ≤ 2. Subrótulo pela economia.</li>
+<li>ECO ≥ +30 e CUL ≥ +30: Conservador liberal; com NAC ≥ +60, Nacional-conservador; com AUT ≥ +60, Conservador com tendência autoritária.</li>
+<li>ECO ≥ +60 e CUL ≤ -30: Liberal de mercado com progressismo cultural; Libertário se AUT ≤ -30.</li>
+<li>ECO ≥ +30 e CUL entre -29 e +29: Liberal clássico.</li>
+<li>ECO entre -29 e +29 e CUL ≥ +30: Conservadorismo moderado / Democrata-cristão.</li>
+<li>ECO ≤ -30 e CUL ≥ +30: Socialismo com conservadorismo cultural (híbrido raro).</li>
+<li>ECO entre -59 e -30 e CUL ≤ -30: Social-liberal / Social-democrata progressista.</li>
+<li>ECO ≤ -60: Socialista, com subtipos por AUT e INS.</li>
+<li>ECO e CUL entre -29 e +29: Centrista (com ordem ou soberanista conforme AUT e NAC).</li>
+<li>ECO ≤ -30, NAC ≥ +60 e AUT ≥ +30: Nacional-desenvolvimentismo / Populismo de esquerda.</li>
+<li>ECO ≥ +30, NAC ≥ +60 e CUL ≥ +30: Direita nacionalista.</li>
+</ol>
+<h3>Limitações</h3>
+<p>O resultado é um mapa aproximado, construído a partir de 100 afirmações simplificadas. Ele não substitui leitura, debate e reflexão. Os vetores dos autores são estimativas interpretativas, não medições.</p>
+<h3>Influências teóricas</h3>
+<p>A triangulação usa como âncoras conceituais tradições representadas por Burke (conservadorismo), Marx (socialismo), Mill (liberalismo social), Rawls (justiça), Nozick (liberalismo de mínima intervenção), Bernstein (social-democracia) e Bobbio (ideia de esquerda e direita).</p>
+</div>
+</div>
+</section>
+
+<footer class="bp-footer no-print">Bússola Política e Filosófica · Instrumento interpretativo de autoconhecimento · Dados salvos apenas neste navegador.</footer>
+</div>
+
+<dialog class="bp-dialog" id="dlgConfirm" aria-labelledby="dlgConfirmTitle">
+<div class="bp-dialog-body">
+<h2 id="dlgConfirmTitle">Confirmar ação</h2>
+<p class="bp-muted" id="dlgConfirmText"></p>
+<div class="bp-dialog-actions">
+<button class="bp-btn ghost" id="dlgCancel" type="button">Cancelar</button>
+<button class="bp-btn danger" id="dlgOk" type="button">Confirmar</button>
+</div>
+</div>
+</dialog>
+
+<script>
+(function () {
+"use strict";
+
+var QUESTIONS = [
+[1,"O Estado deve garantir a todos acesso gratuito aos serviços públicos de saúde.","ECO",-1,"Economia"],
+[2,"A propriedade privada dos meios de produção é a base mais eficiente para gerar riqueza.","ECO",1,"Economia"],
+[3,"Impostos mais altos sobre os mais ricos são necessários para reduzir a desigualdade.","ECO",-1,"Economia"],
+[4,"O Estado deve planejar a economia, definindo metas de produção para setores estratégicos.","ECO",-1,"Economia"],
+[5,"Empresas estatais devem ser preferidas a empresas privadas em setores essenciais.","ECO",-1,"Economia"],
+[6,"Reduzir impostos sobre empresas estimula mais a economia do que expandir programas sociais.","ECO",1,"Economia"],
+[7,"Programas de transferência de renda são essenciais para combater a pobreza.","ECO",-1,"Economia"],
+[8,"Salários devem ser definidos principalmente pela negociação livre entre empregadores e trabalhadores.","ECO",1,"Economia"],
+[9,"Sindicatos devem ter forte poder de negociação e influência sobre as decisões econômicas.","ECO",-1,"Economia"],
+[10,"A economia se beneficia mais do livre comércio do que da proteção à produção nacional.","ECO",1,"Economia"],
+[11,"Setores como energia, água e telecomunicações devem ser controlados pelo Estado.","ECO",-1,"Economia"],
+[12,"Reformas da previdência devem reduzir privilégios e ampliar regras contributivas individuais.","ECO",1,"Economia"],
+[13,"A desigualdade econômica é um problema que o Estado deve corrigir ativamente.","ECO",-1,"Economia"],
+[14,"A inflação deve ser combatida principalmente com disciplina fiscal e banco central independente.","ECO",1,"Economia"],
+[15,"O Estado deve garantir trabalho remunerado a todos que queiram trabalhar.","ECO",-1,"Economia"],
+[16,"Privatizações tendem a melhorar a eficiência dos serviços públicos.","ECO",1,"Economia"],
+[17,"Regulações sobre empresas devem ser reduzidas ao mínimo necessário.","ECO",1,"Economia"],
+[18,"O Estado de bem-estar social deve ser ampliado, mesmo que isso exija mais impostos.","ECO",-1,"Economia"],
+[19,"A economia funciona melhor quando o governo interfere o mínimo possível.","ECO",1,"Economia"],
+[20,"Grandes fortunas devem ser fortemente tributadas, inclusive na transmissão por herança.","ECO",-1,"Economia"],
+[21,"Em crises graves, é necessária a centralização de poder em um líder forte.","AUT",1,"Estado e instituições"],
+[22,"Estados e municípios devem ter mais autonomia, em vez de decisões centralizadas no governo federal.","CENT",-1,"Estado e instituições"],
+[23,"Decisões de grande impacto nacional devem ir a plebiscito, e não depender só do Congresso.","CENT",-1,"Estado e instituições"],
+[24,"O governo central deve poder intervir em estados e municípios diante de má gestão comprovada.","CENT",1,"Estado e instituições"],
+[25,"A separação dos três poderes deve ser preservada mesmo quando dificultar reformas rápidas.","INS",1,"Estado e instituições"],
+[26,"Mudanças profundas na sociedade às vezes justificam romper com as regras institucionais.","INS",-1,"Estado e instituições"],
+[27,"A Constituição deve ser interpretada de forma flexível, para acompanhar as transformações sociais.","INS",-1,"Estado e instituições"],
+[28,"A estabilidade das instituições vale mais do que reformas aceleradas.","INS",1,"Estado e instituições"],
+[29,"A democracia representativa, apesar de imperfeita, é o melhor sistema disponível.","INS",1,"Estado e instituições"],
+[30,"Em situações de crise extrema, é justo suspender direitos políticos e garantias individuais.","AUT",1,"Estado e instituições"],
+[31,"As decisões do legislativo devem poder ser limitadas pelo judiciário quando violarem a Constituição.","INS",1,"Estado e instituições"],
+[32,"Uma monarquia constitucional seria uma forma de governo tão legítima quanto, ou mais do que, a república.","INS",1,"Estado e instituições"],
+[33,"A política deve ser feita por partidos estruturados e programas coerentes, e não por personalidades.","INS",1,"Estado e instituições"],
+[34,"Líderes que confrontam as elites políticas \"em nome do povo\" são necessários para renovar a democracia.","INS",-1,"Estado e instituições"],
+[35,"Eleitos que descumprem promessas deveriam poder ter o mandato revogado por referendo popular.","CENT",-1,"Estado e instituições"],
+[36,"Reformas constitucionais profundas devem exigir consenso amplo, e não simples maioria.","INS",1,"Estado e instituições"],
+[37,"Valores tradicionais, como o casamento entre um homem e uma mulher, devem ser preservados como padrão social.","CUL",1,"Sociedade e costumes"],
+[38,"A transformação dos papéis de gênero representa progresso social.","CUL",-1,"Sociedade e costumes"],
+[39,"O aborto deve ser legalizado, com atendimento seguro pelo sistema público de saúde.","CUL",-1,"Sociedade e costumes"],
+[40,"A religião é alicerce indispensável da moral individual e da vida pública.","CUL",1,"Sociedade e costumes"],
+[41,"O Estado deve ser laico e não favorecer nenhuma religião.","CUL",-1,"Sociedade e costumes"],
+[42,"A família formada por pai, mãe e filhos é a base mais saudável da sociedade.","CUL",1,"Sociedade e costumes"],
+[43,"A diversidade cultural e étnica é uma riqueza que deve ser celebrada publicamente.","CUL",-1,"Sociedade e costumes"],
+[44,"Políticas de cotas para minorias são justas e necessárias.","CUL",-1,"Sociedade e costumes"],
+[45,"A sociedade deve garantir apenas igualdade de oportunidades; igualdade de resultados é injusta.","CUL",1,"Sociedade e costumes"],
+[46,"A identidade de gênero declarada por cada pessoa deve ser plenamente reconhecida pelo Estado.","CUL",-1,"Sociedade e costumes"],
+[47,"Os direitos das pessoas LGBT devem ser plenamente garantidos e protegidos em lei.","CUL",-1,"Sociedade e costumes"],
+[48,"As transformações culturais recentes ameaçam a coesão social.","CUL",1,"Sociedade e costumes"],
+[49,"A moral tradicional da maioria deve prevalecer sobre demandas de minorias culturais.","CUL",1,"Sociedade e costumes"],
+[50,"Em questões de estilo de vida, a autonomia individual deve prevalecer sobre a tradição.","CUL",-1,"Sociedade e costumes"],
+[51,"A eutanásia deve ser permitida em casos comprovados de sofrimento irreversível.","CUL",-1,"Sociedade e costumes"],
+[52,"A pena de morte é uma punição justa para crimes hediondos.","AUT",1,"Segurança e justiça"],
+[53,"Homens e mulheres devem ter representação igualitária nos cargos públicos de decisão.","CUL",-1,"Sociedade e costumes"],
+[54,"Policiais devem ter poderes ampliados para combater a criminalidade.","AUT",1,"Segurança e justiça"],
+[55,"Penas mais severas reduzem a criminalidade.","AUT",1,"Segurança e justiça"],
+[56,"O objetivo principal do sistema prisional deve ser a ressocialização, e não apenas a punição.","AUT",-1,"Segurança e justiça"],
+[57,"Os cidadãos devem ter o direito de portar armas de fogo.","AUT",1,"Segurança e justiça"],
+[58,"A liberdade de expressão deve ser restrita quando ofender grupos vulneráveis.","AUT",1,"Segurança e justiça"],
+[59,"O governo deve poder censurar obras de arte que ofendam valores religiosos.","AUT",1,"Segurança e justiça"],
+[60,"A desobediência civil pacífica é forma legítima de pressão política.","AUT",-1,"Segurança e justiça"],
+[61,"Manifestações que bloqueiam vias públicas devem ser dispersadas com firmeza.","AUT",1,"Segurança e justiça"],
+[62,"Adolescentes que cometem crimes graves devem responder como adultos.","AUT",1,"Segurança e justiça"],
+[63,"A violência policial excessiva é um problema menos grave do que a impunidade criminal.","AUT",1,"Segurança e justiça"],
+[64,"Em crimes violentos, garantias processuais devem ceder para acelerar punições.","AUT",1,"Segurança e justiça"],
+[65,"Investir em educação e oportunidades combate o crime melhor do que contratar mais policiais.","AUT",-1,"Segurança e justiça"],
+[66,"O Estado deve poder monitorar comunicações privadas quando necessário à segurança nacional.","AUT",1,"Segurança e justiça"],
+[67,"A educação pública estatal, gratuita e de qualidade deve ser prioridade nacional.","ECO",-1,"Cultura e educação"],
+[68,"As famílias devem poder escolher a escola dos filhos, com apoio financeiro do Estado (vouchers).","ECO",1,"Cultura e educação"],
+[69,"As escolas devem transmitir os valores tradicionais da nação.","CUL",1,"Cultura e educação"],
+[70,"As escolas devem formar alunos que questionem convenções e valores estabelecidos.","CUL",-1,"Cultura e educação"],
+[71,"O currículo escolar deve ser definido centralmente pelo poder federal.","CENT",1,"Cultura e educação"],
+[72,"O Estado deve financiar a produção artística e cultural.","ECO",-1,"Cultura e educação"],
+[73,"A cultura deve se sustentar pelo mercado, sem subsídios estatais.","ECO",1,"Cultura e educação"],
+[74,"Existe um projeto ideológico na educação para transformar a sociedade contra os valores das famílias.","CUL",1,"Cultura e educação"],
+[75,"Os grandes veículos de comunicação representam uma elite cultural distante do povo.","INS",-1,"Cultura e educação"],
+[76,"Políticas públicas devem se guiar por evidência científica, mesmo quando contrariar crenças tradicionais.","CUL",-1,"Cultura e educação"],
+[77,"A universidade deve formar cidadãos críticos, engajados na transformação social.","CUL",-1,"Cultura e educação"],
+[78,"A universidade deve buscar excelência técnica e meritocrática, sem agendas políticas.","CUL",1,"Cultura e educação"],
+[79,"A soberania nacional deve ser preservada mesmo que isso custe benefícios econômicos.","NAC",1,"Política externa e nacionalidade"],
+[80,"Organismos internacionais devem poder condicionar decisões nacionais, como em tratados climáticos.","NAC",-1,"Política externa e nacionalidade"],
+[81,"A imigração deve ser restrita para proteger a identidade cultural do país.","NAC",1,"Política externa e nacionalidade"],
+[82,"No conjunto, a globalização econômica traz mais benefícios do que danos.","NAC",-1,"Política externa e nacionalidade"],
+[83,"Os países deveriam buscar a máxima integração econômica entre si.","NAC",-1,"Política externa e nacionalidade"],
+[84,"O patriotismo deve ser cultivado nas escolas e nos símbolos nacionais.","NAC",1,"Política externa e nacionalidade"],
+[85,"O país deve dedicar esforço à liderança mundial em agendas universais, como direitos humanos e clima.","NAC",-1,"Política externa e nacionalidade"],
+[86,"Empresas estrangeiras não deveriam controlar setores estratégicos nacionais.","NAC",1,"Política externa e nacionalidade"],
+[87,"As fronteiras nacionais estão cada vez menos relevantes no mundo atual.","NAC",-1,"Política externa e nacionalidade"],
+[88,"A política externa deve colocar o interesse nacional acima de valores universais.","NAC",1,"Política externa e nacionalidade"],
+[89,"A defesa nacional merece investimentos fortes mesmo em tempos de paz.","NAC",1,"Política externa e nacionalidade"],
+[90,"A entrada de capitais e empresas estrangeiras deve ser estimulada sem restrições.","NAC",-1,"Política externa e nacionalidade"],
+[91,"A proteção ambiental deve prevalecer sobre interesses econômicos quando em conflito.","ECO",-1,"Meio ambiente e tecnologia"],
+[92,"Regulação ambiental excessiva trava o desenvolvimento econômico.","ECO",1,"Meio ambiente e tecnologia"],
+[93,"A transição para energias renováveis deve ser acelerada, mesmo com custo elevado.","ECO",-1,"Meio ambiente e tecnologia"],
+[94,"O Estado deve investir fortemente em ciência, tecnologia e inovação.","ECO",-1,"Meio ambiente e tecnologia"],
+[95,"O Estado deve regular plataformas digitais para conter desinformação e discurso de ódio.","AUT",1,"Meio ambiente e tecnologia"],
+[96,"A regulação de redes sociais representa uma ameaça à liberdade de expressão.","AUT",-1,"Meio ambiente e tecnologia"],
+[97,"A privacidade individual deve prevalecer sobre o controle estatal de dados pessoais.","AUT",-1,"Meio ambiente e tecnologia"],
+[98,"A inovação privada resolve os problemas ambientais melhor do que regulamentações estatais.","ECO",1,"Meio ambiente e tecnologia"],
+[99,"Os recursos naturais são patrimônio coletivo e devem ser geridos pelo Estado.","ECO",-1,"Meio ambiente e tecnologia"],
+[100,"O desenvolvimento econômico deve ser a prioridade máxima, mesmo com impactos ambientais moderados.","ECO",1,"Meio ambiente e tecnologia"]
+];
+
+var CHIP_LABELS = {"Economia":"Economia","Estado e instituições":"Estado e instituições","Sociedade e costumes":"Sociedade e costumes","Segurança e justiça":"Segurança e justiça","Cultura e educação":"Cultura e educação","Política externa e nacionalidade":"Política externa e nacionalidade","Meio ambiente e tecnologia":"Meio ambiente e tecnologia"};
+var SCALE = ["Discordo totalmente","Discordo","Neutro / depende / não tenho posição definida","Concordo","Concordo totalmente"];
+var SCALE_SHORT = ["Discordo T.","Discordo","Neutro","Concordo","Concordo T."];
+var AXES = ["ECO","CUL","AUT","NAC","INS","CENT"];
+var AXIS_NAMES = {ECO:"Economia",CUL:"Costumes",AUT:"Ordem e liberdade",NAC:"Nação",INS:"Instituições",CENT:"Centralização"};
+var AXIS_POLES = {
+ECO:["Coletivismo / intervenção","Mercado livre"],
+CUL:["Progressismo cultural","Tradição / conservadorismo"],
+AUT:["Liberdade individual","Ordem / Estado forte"],
+NAC:["Internacionalismo","Nacionalismo / soberania"],
+INS:["Transformação radical","Preservação institucional"],
+CENT:["Descentralização","Centralização"]
+};
+var AXIS_LABELS = {
+ECO:[[60,"Mercado livre"],[30,"Predominância de mercado"],[-29,"Economia mista"],[-59,"Predominância estatal"],[-999,"Coletivismo econômico"]],
+CUL:[[60,"Tradicionalista"],[30,"Conservador"],[-29,"Moderado"],[-59,"Progressista"],[-999,"Progressismo radical"]],
+AUT:[[60,"Autoritário"],[30,"Ordem fortemente valorizada"],[-29,"Equilíbrio ordem-liberdade"],[-59,"Liberdades civis prioritárias"],[-999,"Libertário civil"]],
+NAC:[[60,"Nacionalista"],[30,"Soberanista/patriota"],[-29,"Equilíbrio"],[-59,"Internacionalista"],[-999,"Cosmopolita"]],
+INS:[[60,"Conservador institucional"],[30,"Reformista gradual"],[-29,"Pragmático"],[-59,"Reformista profundo"],[-999,"Revolucionário"]],
+CENT:[[60,"Centralizador"],[30,"Centralização predominante"],[-29,"Equilíbrio"],[-59,"Descentralizador"],[-999,"Autonomista/federalista"]]
+};
+var AXIS_DESC = {
+ECO:"Papel do mercado, do Estado e da redistribuição.",
+CUL:"Valores de família, religião e tradição nos costumes.",
+AUT:"Equilíbrio entre autoridade, segurança e liberdades individuais.",
+NAC:"Peso da soberania nacional frente à integração internacional.",
+INS:"Preferência por estabilidade institucional ou transformação.",
+CENT:"Onde deve estar concentrado o poder de decisão."
+};
+
+var PAIRS = [[58,96],[60,61],[26,28],[55,56],[40,41],[13,45],[79,83]];
+var PAIR_PATTERNS = {
+"58-96":"Defende restringir discurso ofensivo, mas teme a regulação de redes sociais.",
+"60-61":"Aprova a desobediência pacífica e também a dispersão firme de manifestações.",
+"26-28":"Valoriza estabilidade institucional, mas admite romper regras em mudanças profundas.",
+"55-56":"Acredita que penas severas reduzem o crime, mas também defende ressocialização.",
+"40-41":"Vê a religião como alicerce da moral e, ao mesmo tempo, defende um Estado laico.",
+"13-45":"Quer que o Estado corrija a desigualdade, mas rejeita a igualdade de resultados.",
+"79-83":"Prioriza a soberania nacional, mas também quer máxima integração econômica."
+};
+
+var BASE_W = {ECO:0.40,CUL:0.25,AUT:0.15,NAC:0.12,INS:0.08};
+
+var AUTHORS = [
+["Burke",30,70,30,20,60],["Olavo de Carvalho",55,90,35,70,55],["Roger Scruton",40,85,30,40,70],["Russell Kirk",30,85,30,30,75],["Oakeshott",45,70,20,20,80],["Chesterton",-30,70,10,30,30],["Tocqueville",50,40,-20,10,40],["Maistre",5,95,85,40,90],["Bonald",5,95,85,40,90],["Hayek",90,40,-20,10,30],["Marx",-95,-30,20,-40,-90],["Engels",-90,-25,35,-35,-85],["Lenin",-95,-15,80,-25,-90],["Trotsky",-90,-35,70,-80,-80],["Rosa Luxemburgo",-85,-40,-25,-70,-70],["Gramsci",-80,-60,20,-30,-55],["Mao",-80,10,85,70,-90],["Stalin",-95,10,95,45,-55],["Bakunin",-80,-40,-90,-55,-85],["Che Guevara",-90,-10,60,40,-85],["Mussolini",-50,70,90,95,-40],["Gentile",-60,75,85,90,-35],["Plínio Salgado",-40,85,80,85,-10],["Franco",-20,90,85,80,45],["Mosley",-40,80,90,90,-25],["Hitler",-40,90,95,100,-50],["Goebbels",-45,90,95,100,-50],["Himmler",-45,95,95,100,-55],["Göring",-50,85,95,95,-45],["Rosenberg",-40,95,95,100,-55],["Dom Pedro II",-10,70,30,40,75],["Maurras",10,90,80,95,70],["Bismarck",-30,70,75,70,60],["Metternich",10,90,80,30,95],["José Bonifácio",-20,50,30,60,55],["Marquês de Itanhaém",-10,70,40,40,75],["Visconde de Cairu",70,40,10,20,40],["Vasconcelos",55,65,40,40,60],["Miguel Reale",-20,40,20,50,50],["Plínio Corrêa de Oliveira",20,95,50,50,85],["Gustavo Corção",25,90,40,50,70],["Gilberto Freyre",20,60,10,40,40],["Roberto Campos",85,30,20,20,40],["Enéas Carneiro",-30,60,50,95,30],["J.S. Mill",50,-20,-70,5,10],["Bernstein",-60,-10,-40,-10,40],["Rawls",-50,-40,-30,-10,20],["Nozick",95,10,-75,5,20],["Bobbio",-40,-40,-30,-40,60],["Rousseau",-40,-5,35,50,-70],["Proudhon",-75,20,-80,40,-60],["Weber",40,50,40,40,50],["Carl Schmitt",20,80,90,85,30],["Mises",95,30,-10,20,20],["Isaiah Berlin",30,-20,-60,-20,30],["Hannah Arendt",-10,-15,-50,-25,20],["Foucault",-50,-80,-70,-40,-50],["Habermas",-40,-50,-40,-50,30],["Giddens",-10,-30,10,-45,40],["Fukuyama",60,-20,-30,-30,70],["Huntington",40,70,30,70,50]
+];
+var CURRENTS = [
+["Conservadorismo clássico",30,80,30,30,65],["Liberalismo clássico",85,20,-25,-10,35],["Libertarianismo",95,0,-75,-20,20],["Social-liberalismo",-35,-30,-35,-25,25],["Social-democracia",-55,-25,-25,-30,45],["Socialismo democrático",-75,-20,-40,-45,15],["Comunismo revolucionário",-95,-15,55,-50,-90],["Comunismo autoritário",-95,10,90,35,-55],["Fascismo",-50,75,90,90,-40],["Nazismo",-40,90,95,100,-50],["Integralismo",-40,85,80,85,-10],["Monarquismo tradicional",10,90,80,40,85],["Nacionalismo soberanista",0,55,55,95,40],["Populismo de esquerda",-60,10,45,70,-35],["Populismo de direita",20,70,60,80,-30],["Terceira via",-10,-35,10,-45,40],["Progressismo cultural",-25,-70,-45,-45,-15],["Democracia cristã",-25,60,25,30,55]
+];
+var AUTH_TRAD = {
+ECO:["Hayek","Mises","Roberto Campos","Visconde de Cairu"],
+CUL:["Burke","Scruton","Russell Kirk","Foucault"],
+AUT:["Tocqueville","Mill","Burke","Bobbio"],
+NAC:["Carl Schmitt","Maurras","Enéas Carneiro","Habermas"],
+INS:["Oakeshott","Burke","Fukuyama","Bakunin"]
+};
+
+// ---------- State ----------
+var store = window.skipStore ? window.skipStore("bussola-politica-v1", {answers:{}, ts:null}) : null;
+function loadState() {
+var s = store ? store.get() : null;
+if (!s || typeof s !== "object") s = {answers:{}, ts:null};
+if (!s.answers) s.answers = {};
+return s;
+}
+var state = loadState();
+var current = 1;
+var pendingAction = null;
+
+function saveState() {
+state.ts = new Date().toISOString();
+if (store) store.set(state);
+}
+function isCompleted() { return answeredCount() === 100 && (!!state.completedAt || !!state.completed); }
+function backfillCompletion() {
+if (!state.completedAt) {
+state.completed = true;
+state.completedAt = new Date().toISOString();
+saveState();
+}
+}
+function fmtDateBr(iso) {
+var d = new Date(iso);
+if (isNaN(d.getTime())) return "";
+var p = function(n){ return (n<10?"0":"")+n; };
+return p(d.getDate())+"/"+p(d.getMonth()+1)+"/"+d.getFullYear();
+}
+function answerOf(n) { return state.answers[n] !== undefined ? state.answers[n] : null; }
+function answeredCount() { return Object.keys(state.answers).length; }
+
+// ---------- Helpers ----------
+function $(id) { return document.getElementById(id); }
+function show(id) { $(id).classList.remove("bp-hidden"); }
+function hide(id) { $(id).classList.add("bp-hidden"); }
+function setView(v) {
+["viewIntro","viewQuiz","viewReview","viewResult"].forEach(function (x) { hide(x); });
+show(v);
+window.scrollTo(0, 0);
+}
+function tone(v){ return v; }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function fmtScore(v){ return (v>0?"+":"")+Math.round(v); }
+
+function confirmDialog(text, fn) {
+$("dlgConfirmText").textContent = text;
+pendingAction = fn;
+$("dlgConfirm").showModal();
+}
+$("dlgCancel").addEventListener("click", function(){ pendingAction=null; $("dlgConfirm").close(); });
+$("dlgOk").addEventListener("click", function(){
+var f = pendingAction; pendingAction=null; $("dlgConfirm").close();
+if (f) f();
+});
+
+// ---------- Scoring ----------
+function computeScores() {
+var sums = {}, counts = {}, totals = {}, contribs = {}, nonNeutral = 0, intensitySum = 0;
+AXES.forEach(function(a){ sums[a]=0; counts[a]=0; totals[a]=0; contribs[a]=[]; });
+QUESTIONS.forEach(function(q){
+var n=q[0], ax=q[2], d=q[3];
+totals[ax] = (totals[ax]||0)+1;
+var r = answerOf(n);
+if (r === null) return;
+if (r !== 3) {
+var c = d*(r-3);
+sums[ax]+=c; counts[ax]++;
+contribs[ax].push(c);
+nonNeutral++;
+intensitySum += Math.abs(r-3);
+}
+});
+var scores = {}, engage = {}, coher = {};
+AXES.forEach(function(a){
+if (counts[a]===0) { scores[a]=null; }
+else scores[a] = (sums[a]/counts[a])*50;
+engage[a] = totals[a] ? counts[a]/totals[a] : 0;
+if (contribs[a].length>1) {
+var mean = contribs[a].reduce(function(x,y){return x+y;},0)/contribs[a].length;
+var varc = contribs[a].reduce(function(x,y){return x+(y-mean)*(y-mean);},0)/contribs[a].length;
+coher[a] = Math.sqrt(varc)*50;
+} else coher[a] = null;
+});
+var intensity = nonNeutral ? (intensitySum/nonNeutral)*50 : 0;
+var neutralCount = 0, answered = answeredCount();
+Object.keys(state.answers).forEach(function(k){ if (state.answers[k]===3) neutralCount++; });
+return {scores:scores, engage:engage, coher:coher, intensity:intensity, neutralPct: answered? neutralCount/answered : 0, nonNeutral:nonNeutral, contribs:contribs};
+}
+
+function axisLabel(a, v) {
+if (v===null) return "Sinal indefinido";
+var rows = AXIS_LABELS[a];
+for (var i=0;i<rows.length;i++) if (v>=rows[i][0]) return rows[i][1];
+return rows[rows.length-1][1];
+}
+
+function computeLDR(S) {
+var num=0, den=0;
+["ECO","CUL","AUT","NAC","INS"].forEach(function(a){
+if (S.scores[a]===null) return;
+var w = BASE_W[a]*S.engage[a];
+num += w*S.scores[a]; den += w;
+});
+return den>0 ? num/den : 0;
+}
+var BANDS = [
+{min:60,max:999,label:"Extrema-direita",idx:6},
+{min:30,max:59.999,label:"Direita",idx:5},
+{min:10,max:29.999,label:"Centro-direita",idx:4},
+{min:-9.999,max:9.999,label:"Centro",idx:3},
+{min:-29.999,max:-10,label:"Centro-esquerda",idx:2},
+{min:-59.999,max:-30,label:"Esquerda",idx:1},
+{min:-999,max:-60.0001,label:"Extrema-esquerda",idx:0}
+];
+function bandOf(v){
+for (var i=0;i<BANDS.length;i++){ if (v>=BANDS[i].min && v<=BANDS[i].max) return BANDS[i]; }
+if (v>=60) return BANDS[0];
+if (v<=-60) return BANDS[6];
+return BANDS[3];
+}
+var BAND_THRESH = [60,30,10,-10,-30,-60];
+function nearbyBand(v){
+var best=null;
+BAND_THRESH.forEach(function(t){
+var d=Math.abs(v-t);
+if (d<=12 && (!best || d<best.d)) best={t:t,d:d};
+});
+if (!best) return null;
+var lbl;
+if (best.t===60) lbl="Extrema-direita";
+else if (best.t===30) lbl="Direita";
+else if (best.t===10) lbl="Centro-direita";
+else if (best.t===-10) lbl="Centro-esquerda";
+else if (best.t===-30) lbl="Esquerda";
+else lbl="Extrema-esquerda";
+var toward = v>=best.t ? "limite de "+lbl : "limite de "+lbl;
+return {label:lbl, d:best.d, t:best.t};
+}
+
+function whyDrivers(S) {
+var items=[];
+["ECO","CUL","AUT","NAC","INS"].forEach(function(a){
+if (S.scores[a]===null) return;
+var w = BASE_W[a]*S.engage[a];
+items.push({axis:a, impact: w*S.scores[a]});
+});
+items.sort(function(x,y){ return Math.abs(y.impact)-Math.abs(x.impact); });
+return items.slice(0,2);
+}
+
+// ---------- Classification ----------
+function getScore(S,a){ return S.scores[a]===null?0:S.scores[a]; }
+function classify(S) {
+var E=getScore(S,"ECO"), C=getScore(S,"CUL"), A=getScore(S,"AUT"), N=getScore(S,"NAC"), I=getScore(S,"INS");
+var a32=answerOf(32), a33=answerOf(33), a34=answerOf(34);
+var matches=[];
+if (a32!==null && a32>=4 && I>=30) matches.push({t:"Monarquista", note:"Destaque especial: forma de governo, não posição econômica."});
+if (a34!==null && a34>=4 && a33!==null && a33<=2){
+var sub = E<=-30?" de esquerda":(E>=30?" de direita":" transversal");
+matches.push({t:"Populista"+sub});
+}
+if (E>=30 && C>=30){
+var t="Conservador liberal";
+if (N>=60) t="Nacional-conservador";
+if (A>=60) t="Conservador com tendência autoritária";
+matches.push({t:t});
+}
+if (E>=60 && C<=-30){
+var t2 = A<=-30 ? "Libertário" : "Liberal de mercado com progressismo cultural";
+matches.push({t:t2});
+}
+if (E>=30 && C>-30 && C<30) matches.push({t:"Liberal clássico"});
+if (E>-30 && E<30 && C>=30) matches.push({t:"Conservadorismo moderado / Democrata-cristão"});
+if (E<=-30 && C>=30) matches.push({t:"Socialismo com conservadorismo cultural (híbrido raro)", rare:true});
+if (E<=-30 && E>-60 && C<=-30) matches.push({t:"Social-liberal / Social-democrata progressista"});
+if (E<=-60){
+var sub2 = "";
+if (A<=-30 && I>=30) sub2=" democrático";
+else if (A>=60) sub2=" autoritário (histórico)";
+else if (I<=-60) sub2=" revolucionário";
+matches.push({t:"Socialista"+(sub2?" — "+sub2.trim():"")});
+}
+if (E>-30 && E<30 && C>-30 && C<30){
+var t3="Centrista";
+if (A>=30) t3+=" com apelo à ordem";
+if (N>=60) t3+=", soberanista";
+matches.push({t:t3});
+}
+if (E<=-30 && N>=60 && A>=30) matches.push({t:"Nacional-desenvolvimentismo / Populismo de esquerda"});
+if (E>=30 && N>=60 && C>=30) matches.push({t:"Direita nacionalista"});
+if (!matches.length) matches.push({t:"Posição intermediária sem rótulo dominante"});
+var main = matches[0];
+var sec = matches.slice(1,3);
+return {main:main, secondary:sec, all:matches};
+}
+
+// ---------- Authors/currents ----------
+function userVector(S){
+return AXES.slice(0,5).map(function(a){ return getScore(S,a); });
+}
+function weightsFor(S){
+return AXES.slice(0,5).map(function(a){ return S.engage[a]+0.15; });
+}
+function distance(vec, ref, w){
+var s=0;
+for (var i=0;i<vec.length;i++){
+var d = vec[i]-ref[i];
+s += w[i]*d*d;
+}
+return Math.sqrt(s / w.reduce(function(x,y){return x+y;},0));
+}
+function rankRefs(S, list){
+var u = userVector(S), w = weightsFor(S);
+return list.map(function(r){
+var v = r.slice(1,6);
+return {name:r[0], vec:v, dist:distance(u,v,w)};
+}).sort(function(a,b){ return a.dist-b.dist; });
+}
+function justify(S, vec, name){
+var parts=[];
+var names = ["Economia","Costumes","Ordem","Nação","Instituições"];
+var conv=[], div=[];
+for (var i=0;i<5;i++){
+var a=AXES[i];
+if (S.scores[a]===null) continue;
+var diff = Math.abs(S.scores[a]-vec[i]);
+if (diff<=35) conv.push(names[i]);
+else if (diff>=70) div.push(names[i]);
+}
+var s = "";
+if (conv.length) s += "converge nos eixos "+conv.join(", ").toLowerCase()+". ";
+if (div.length) s += "diverge principalmente em "+div.join(", ").toLowerCase()+".";
+if (!s) s = "perfil de proximidade moderada com a sua posição nos eixos dominantes.";
+return name+": "+s;
+}
+function authorJust(S,vec,name){
+return justify(S,vec,name);
+}
+
+// ---------- Render result ----------
+function computeAll(){
+var S = computeScores();
+var LDR = computeLDR(S);
+var band = bandOf(LDR);
+var near = nearbyBand(LDR);
+var drivers = whyDrivers(S);
+var cls = classify(S);
+var tens = [];
+PAIRS.forEach(function(p){
+var a=answerOf(p[0]), b=answerOf(p[1]);
+if (a===null||b===null) return;
+var div = Math.abs((a-3)+(b-3));
+if (div>=3) tens.push({pair:p, div:div, qa:QUESTIONS[p[0]-1][1], qb:QUESTIONS[p[1]-1][1], pattern: PAIR_PATTERNS[p[0]+"-"+p[1]]});
+});
+return {S:S, LDR:LDR, band:band, near:near, drivers:drivers, cls:cls, tens:tens};
+}
+
+function renderRuler(LDR, band){
+var colors = ["#8b1d13","#c0392b","#d98880","#95a5a6","#8fb3dd","#2860a8","#163d6e"];
+var labels = ["Extrema-esquerda","Esquerda","Centro-esquerda","Centro","Centro-direita","Direita","Extrema-direita"];
+var W=560,H=130,x0=20,segW=(W-40)/7;
+var pos = Math.max(-100,Math.min(100,LDR));
+var px = x0 + ((pos+100)/200)*(W-40);
+var svg = '<svg class="bp-ruler-svg" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Régua esquerda-direita com marcador em '+fmtScore(LDR)+'">';
+for (var i=0;i<7;i++){
+var op = i===band.idx?1:0.35;
+svg += '<rect class="bp-ruler-seg" x="'+(x0+i*segW)+'" y="40" width="'+segW+'" height="34" fill="'+colors[i]+'" opacity="'+op+'"/>';
+svg += '<text x="'+(x0+i*segW+segW/2)+'" y="95" font-size="9" text-anchor="middle" fill="#16202e">'+labels[i].replace("Extrema-","Ext. ").replace("Centro-","C-").replace("Centro","Centro")+'</text>';
+}
+svg += '<line x1="'+(W/2)+'" y1="34" x2="'+(W/2)+'" y2="80" stroke="#16202e" stroke-width="1" stroke-dasharray="3 3"/>';
+svg += '<g id="rulerMarker" style="transition:transform .8s ease"><polygon points="'+px+',30 '+(px-8)+',14 '+(px+8)+',14" fill="#16202e"/><circle cx="'+px+'" cy="57" r="8" fill="#fff" stroke="#16202e" stroke-width="2"/></g>';
+svg += '<text x="'+px+'" y="10" font-size="12" font-weight="700" text-anchor="middle" fill="#16202e">'+fmtScore(LDR)+'</text>';
+svg += '</svg>';
+return svg;
+}
+
+function renderSvgBar(v){
+var pct = (v+100)/2;
+return pct;
+}
+
+function renderResult(){
+var R = computeAll();
+var S=R.S;
+$("resHero").innerHTML =
+'<span class="bp-kpi-label">Posição geral na régua</span>'+
+'<div class="bp-kpi-value">'+fmtScore(R.LDR)+'</div>'+
+'<div class="bp-pill">'+R.band.label+'</div>'+
+'<p class="bp-muted" style="margin:8px 0 0">Resumo esquerda-direita baseado nos cinco eixos principais.</p>';
+
+$("resMainType").textContent = R.cls.main.t;
+var sec = R.cls.secondary.map(function(s){ return '<span class="bp-pill">'+esc(s.t)+'</span>'; }).join("");
+if (R.cls.main.note) sec = '<p class="bp-muted">'+esc(R.cls.main.note)+'</p>' + sec;
+$("resSecondary").innerHTML = '<p class="bp-muted">Tipos secundários:</p>'+(sec||'<span class="bp-pill neutral">Nenhum</span>');
+
+$("rulerWrap").innerHTML = renderRuler(R.LDR, R.band) +
+'<p class="bp-muted" style="margin-top:8px">A régua é um resumo: economia pesa mais. Autoridade e nacionalismo deslocam pouco, pois existem esquerdas autoritárias e nacionalistas.</p>';
+
+var why = R.drivers.map(function(d){
+var dir = d.impact>=0 ? "empurrou para a direita" : "empurrou para a esquerda";
+return '<li><b>'+AXIS_NAMES[d.axis]+'</b> ('+fmtScore(S.scores[d.axis]===null?0:S.scores[d.axis])+') '+dir+'.</li>';
+}).join("");
+var nearTxt = R.near ? '<div class="bp-warn" style="margin-top:10px">Sua posição está próxima de '+esc(R.near.label)+' (distância '+R.near.d.toFixed(0)+' pontos).</div>' : '<p class="bp-muted" style="margin-top:10px">Sua posição não está próxima de outros limites de faixa.</p>';
+$("whyBox").innerHTML = '<ul class="bp-list">'+(why||"<li>Sem respostas suficientes.</li>")+'</ul>'+nearTxt;
+
+$("hybridLine").innerHTML = [
+["Economia","ECO"],["Costumes","CUL"],["Ordem / liberdade","AUT"],["Nação","NAC"],["Instituições","INS"]
+].map(function(p){
+return '<div><b>'+p[0]+'</b>'+esc(axisLabel(p[1],S.scores[p[1]]))+'</div>';
+}).join("");
+
+$("summaryBox").innerHTML = buildSummary(R);
+$("traitsList").innerHTML = buildTraits(R);
+$("tensionsBox").innerHTML = buildTensions(R);
+renderProfiles(R);
+renderAuthors(R);
+}
+
+function buildSummary(R){
+var S=R.S;
+var eco = axisLabel("ECO",S.scores.ECO);
+var cul = axisLabel("CUL",S.scores.CUL);
+var aut = axisLabel("AUT",S.scores.AUT);
+var ins = axisLabel("INS",S.scores.INS);
+var p1 = "Sua posição geral na régua é "+R.band.label.toLowerCase()+" ("+fmtScore(R.LDR)+"). No eixo econômico, sua tendência é "+eco.toLowerCase()+", e nos costumes, "+cul.toLowerCase()+".";
+var p2 = "Em ordem e liberdade, sua posição indica "+aut.toLowerCase()+". Nas instituições, a leitura é "+ins.toLowerCase()+".";
+var p3 = "Tipo principal: "+R.cls.main.t+". Esta é uma classificação interpretativa, que resume tendências e não define a pessoa.";
+return '<p>'+p1+'</p><p>'+p2+'</p><p>'+p3+'</p>';
+}
+
+function buildTraits(R){
+var S=R.S;
+var axes = AXES.filter(function(a){ return S.scores[a]!==null; });
+axes.sort(function(a,b){ return Math.abs(S.scores[b])-Math.abs(S.scores[a]); });
+var top = axes.slice(0,5);
+if (!top.length) return '<li>Responda mais perguntas para ver características.</li>';
+return top.map(function(a){
+var v=S.scores[a];
+return '<li><b>'+AXIS_NAMES[a]+':</b> '+axisLabel(a,v)+' ('+fmtScore(v)+'). '+AXIS_DESC[a]+'</li>';
+}).join("");
+}
+
+function buildTensions(R){
+var html="";
+if (R.tens.length){
+html += R.tens.map(function(t){
+return '<div class="bp-warn" style="margin-bottom:8px"><b>Perguntas '+t.pair[0]+' e '+t.pair[1]+'</b> (divergência '+t.div+')<br>• '+esc(t.qa)+'<br>• '+esc(t.qb)+(t.pattern?'<br><i>'+esc(t.pattern)+'</i>':'')+'</div>';
+}).join("");
+} else {
+html += '<div class="bp-ok">Nenhuma divergência relevante nos pares de consistência.</div>';
+}
+var answered = answeredCount();
+if (answered){
+var pattern = [];
+if (R.S.scores.ECO!==null && R.S.scores.ECO>=30 && R.S.scores.CUL<=-30) pattern.push("Mercado livre combinado com costumes progressistas, um padrão frequente.");
+if (R.S.scores.ECO!==null && R.S.scores.ECO<=-30 && R.S.scores.CUL>=30) pattern.push("Economia mais estatal combinada com costumes tradicionais, um padrão raro.");
+if (R.S.scores.AUT!==null && R.S.scores.AUT>=30 && R.S.scores.NAC!==null && R.S.scores.NAC<=-30) pattern.push("Ordem valorizada combinada com internacionalismo.");
+if (pattern.length) html += pattern.map(function(p){ return '<p class="bp-muted">• '+p+'</p>'; }).join("");
+}
+return html;
+}
+
+// ---------- Profiles ----------
+function renderProfiles(R){
+var S=R.S;
+$("axisBars").innerHTML = AXES.map(function(a){
+var v = S.scores[a];
+var has = v!==null;
+var pct = has ? (v+100)/2 : 50;
+var left = Math.min(pct,50), width = Math.abs(pct-50);
+var color = has ? (v>=0?"#2860a8":"#c0392b") : "#a0aec0";
+var label = has ? axisLabel(a,v) : "sinal indefinido";
+return '<div class="bp-bar-row"><div class="bp-bar-head"><b>'+AXIS_NAMES[a]+'</b><span>'+(has?fmtScore(v):"—")+' · '+esc(label)+'</span></div>'+
+'<div class="bp-bar-track" role="img" aria-label="'+AXIS_NAMES[a]+': '+(has?fmtScore(v):"indefinido")+'"><div class="bp-bar-zero"></div><div class="bp-bar-fill" style="left:'+left+'%;width:'+width+'%;background:'+color+'"></div></div>'+
+'<p class="bp-muted" style="margin:4px 0 0;font-size:.82rem">'+AXIS_POLES[a][0]+' ← → '+AXIS_POLES[a][1]+' · '+AXIS_DESC[a]+'</p></div>';
+}).join("");
+
+$("scatterWrap").innerHTML = renderScatter(S);
+
+$("intensityBox").innerHTML = '<div class="bp-hero-kpi" style="padding:14px"><span class="bp-kpi-label">Intensidade geral</span><div class="bp-kpi-value" style="font-size:1.6rem">'+Math.round(S.intensity)+'</div><p class="bp-muted" style="margin:0">'+(S.intensity>=50?"Convicção forte":"Convicção moderada")+' nas respostas não-neutras.</p></div>';
+var pctNeutral = Math.round(S.neutralPct*100);
+var pctAns = Math.round(answeredCount());
+var coh = AXES.map(function(a){
+var c=S.coher[a];
+var lv = c===null ? "dados insuficientes" : (c<=25?"coerência alta":(c<=45?"coerência média":"coerência baixa"));
+return '<li><b>'+AXIS_NAMES[a]+':</b> '+lv+'</li>';
+}).join("");
+$("consistencyBox").innerHTML = '<p class="bp-muted">Respostas neutras: <b>'+pctNeutral+'%</b>. Pares divergentes: <b>'+R.tens.length+'</b>.</p><ul class="bp-list">'+coh+'</ul>';
+}
+
+function renderScatter(S){
+var W=300,H=300,pad=28;
+var x = S.scores.ECO===null?0:S.scores.ECO;
+var y = S.scores.CUL===null?0:S.scores.CUL;
+var px = pad + ((x+100)/200)*(W-2*pad);
+var py = H-pad - ((y+100)/200)*(H-2*pad);
+var svg = '<svg viewBox="0 0 '+W+' '+H+'" class="bp-ruler-svg" role="img" aria-label="Dispersão economia por costumes">';
+svg += '<rect x="'+pad+'" y="'+pad+'" width="'+(W-2*pad)+'" height="'+(H-2*pad)+'" fill="#f7f9fc" stroke="#cbd5e0"/>';
+svg += '<line x1="'+(W/2)+'" y1="'+pad+'" x2="'+(W/2)+'" y2="'+(H-pad)+'" stroke="#a0aec0" stroke-dasharray="4 3"/>';
+svg += '<line x1="'+pad+'" y1="'+(H/2)+'" x2="'+(W-pad)+'" y2="'+(H/2)+'" stroke="#a0aec0" stroke-dasharray="4 3"/>';
+svg += '<text x="'+pad+'" y="'+(H-8)+'" font-size="10" fill="#4a5568">Estatal</text>';
+svg += '<text x="'+(W-pad)+'" y="'+(H-8)+'" font-size="10" text-anchor="end" fill="#4a5568">Mercado</text>';
+svg += '<text x="'+(pad+4)+'" y="'+(pad+12)+'" font-size="10" fill="#4a5568">Progressista</text>';
+svg += '<text x="'+(W-pad-4)+'" y="'+(pad+12)+'" font-size="10" text-anchor="end" fill="#4a5568">Tradicional</text>';
+svg += '<circle cx="'+px+'" cy="'+py+'" r="7" fill="#2c4a72" stroke="#fff" stroke-width="2"/>';
+svg += '</svg>';
+return svg;
+}
+
+// ---------- Authors ----------
+function listItem(a, cls){
+return '<div class="bp-author'+(cls?" reject":"")+'"><div class="bp-author-name">'+esc(a.name)+'</div><div class="bp-muted" style="font-size:.85rem">Vetor ECO '+fmtScore(a.vec[0])+' · CUL '+fmtScore(a.vec[1])+' · AUT '+fmtScore(a.vec[2])+' · NAC '+fmtScore(a.vec[3])+' · INS '+fmtScore(a.vec[4])+'</div><p style="margin:6px 0 0;font-size:.9rem">'+esc(a.just)+'</p></div>';
+}
+
+function renderAuthors(R){
+var S=R.S;
+var ranked = rankRefs(S, AUTHORS);
+var top = ranked.slice(0,5).map(function(r){ return {name:r.name, vec:r.vec, just:authorJust(S,r.vec,r.name)}; });
+var bottom = ranked.slice(-3).reverse().map(function(r){ return {name:r.name, vec:r.vec, just:authorJust(S,r.vec,r.name)}; });
+$("authorsTop").innerHTML = top.map(function(a){ return listItem(a,false); }).join("");
+$("authorsBottom").innerHTML = bottom.map(function(a){ return listItem(a,true); }).join("");
+
+var rc = rankRefs(S, CURRENTS);
+var ct = rc.slice(0,4).map(function(r){ return {name:r.name, vec:r.vec, just:authorJust(S,r.vec,r.name)}; });
+var cb = rc.slice(-3).reverse().map(function(r){ return {name:r.name, vec:r.vec, just:authorJust(S,r.vec,r.name)}; });
+$("currentsTop").innerHTML = ct.map(function(a){ return listItem(a,false); }).join("");
+$("currentsBottom").innerHTML = cb.map(function(a){ return listItem(a,true); }).join("");
+
+var trad = AXES.slice(0,5).map(function(a,i){
+var list = AUTH_TRAD[a]||[];
+var names = list.join(", ");
+return '<p><b>'+AXIS_NAMES[a]+':</b> seu perfil nesse eixo dialoga com '+esc(names)+'.</p>';
+}).join("");
+$("traditionsBox").innerHTML = trad + '<p class="bp-muted">Seu perfil econômico dialoga com Hayek e Mises; seu eixo cultural com Burke e Scruton; sua postura de ordem aproxima-se de Tocqueville e afasta-se de Mill.</p>';
+}
+
+// ---------- Quiz ----------
+function renderQuestion(){
+var q = QUESTIONS[current-1];
+$("quizCounter").textContent = current+"/100";
+$("quizProgress").style.width = answeredCount()+"%";
+$("quizProgressWrap").setAttribute("aria-valuenow", String(answeredCount()));
+$("qChip").textContent = CHIP_LABELS[q[4]];
+$("qText").textContent = q[1];
+var sel = answerOf(q[0]);
+$("qScale").innerHTML = SCALE.map(function(l,i){
+var v=i+1;
+var s = sel===v ? " sel" : "";
+return '<button type="button" class="'+s.trim()+'" data-v="'+v+'" aria-pressed="'+(sel===v)+'"><b>'+v+'</b><span class="bp-full">'+l+'</span><span class="bp-short">'+SCALE_SHORT[i]+'</span></button>';
+}).join("");
+$("btnPrev").disabled = current===1;
+$("btnNext").textContent = current===100 ? "Concluir revisão" : "Próxima";
+$("quizHint").textContent = sel===null ? "Escolha uma resposta para avançar." : "Resposta registrada. Você pode alterá-la a qualquer momento.";
+$("btnNext").disabled = sel===null;
+}
+
+function setAnswer(v){
+var q = QUESTIONS[current-1];
+state.answers[q[0]] = v;
+saveState();
+renderQuestion();
+}
+function goNext(){
+if (answerOf(QUESTIONS[current-1][0])===null) return;
+if (current===100){ openReview(); return; }
+current++;
+renderQuestion();
+}
+function goPrev(){ if (current>1){ current--; renderQuestion(); } }
+
+$("qScale").addEventListener("click", function(e){
+var b = e.target.closest("button[data-v]");
+if (!b) return;
+setAnswer(parseInt(b.getAttribute("data-v"),10));
+});
+$("btnNext").addEventListener("click", goNext);
+$("btnPrev").addEventListener("click", goPrev);
+$("btnToReview").addEventListener("click", openReview);
+
+document.addEventListener("keydown", function(e){
+if (!$("viewQuiz").classList.contains("bp-hidden")){
+if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+if (/^[1-5]$/.test(e.key)) { setAnswer(parseInt(e.key,10)); }
+else if (e.key==="ArrowRight") goNext();
+else if (e.key==="ArrowLeft") goPrev();
+else if (e.key==="Enter") goNext();
+}
+});
+
+// ---------- Review ----------
+function openReview(){
+setView("viewReview");
+renderReview();
+}
+function renderReview(){
+var filter = ($("revFilter").value||"").toLowerCase();
+var answered=0, neutral=0;
+Object.keys(state.answers).forEach(function(k){
+answered++; if (state.answers[k]===3) neutral++;
+});
+$("revAnswered").textContent = answered+" respondidas";
+$("revNeutral").textContent = neutral+" neutras";
+$("revMissing").textContent = (100-answered)+" não respondidas";
+var html = "";
+QUESTIONS.forEach(function(q){
+if (filter && q[1].toLowerCase().indexOf(filter)===-1) return;
+var r = answerOf(q[0]);
+html += '<li data-n="'+q[0]+'" tabindex="0"><span><b>'+q[0]+'.</b> '+esc(q[1])+'</span><span class="bp-rev-ans'+(r===null?" empty":"")+'">'+(r===null?"—":r)+'</span></li>';
+});
+$("revList").innerHTML = html || '<li><span class="bp-muted">Nenhuma pergunta encontrada.</span></li>';
+var warnEl = $("revWarn");
+if (answered<100){
+warnEl.textContent = "Faltam "+(100-answered)+" respostas para finalizar. Você precisa responder as 100 perguntas.";
+warnEl.classList.remove("bp-hidden");
+} else warnEl.classList.add("bp-hidden");
+}
+$("revFilter").addEventListener("input", renderReview);
+$("revList").addEventListener("click", function(e){
+var li = e.target.closest("li[data-n]");
+if (!li) return;
+current = parseInt(li.getAttribute("data-n"),10);
+setView("viewQuiz");
+renderQuestion();
+});
+$("revList").addEventListener("keydown", function(e){
+if (e.key==="Enter"){ var li=e.target.closest("li[data-n]"); if(li){ current=parseInt(li.getAttribute("data-n"),10); setView("viewQuiz"); renderQuestion(); } }
+});
+$("btnBackQuiz").addEventListener("click", function(){ setView("viewQuiz"); renderQuestion(); });
+$("btnFinish").addEventListener("click", function(){
+if (answeredCount()<100){
+$("revWarn").classList.remove("bp-hidden");
+window.skipUI && skipUI.toast("Responda todas as 100 perguntas para calcular.", {type:"error"});
+return;
+}
+state.completed = true;
+state.completedAt = new Date().toISOString();
+saveState();
+renderResult();
+setView("viewResult");
+activateTab("tOverview");
+});
+
+// ---------- Tabs ----------
+function activateTab(id){
+var map = {tOverview:"tabOverview",tProfiles:"tabProfiles",tAuthors:"tabAuthors",tMethod:"tabMethod"};
+["tOverview","tProfiles","tAuthors","tMethod"].forEach(function(t){
+var sel = t===id;
+$(t).setAttribute("aria-selected", sel?"true":"false");
+var p = $(map[t]);
+if (sel) p.classList.remove("bp-hidden"); else p.classList.add("bp-hidden");
+});
+}
+["tOverview","tProfiles","tAuthors","tMethod"].forEach(function(t){
+$(t).addEventListener("click", function(){ activateTab(t); });
+});
+
+// ---------- Intro ----------
+function refreshIntro(){
+var n = answeredCount();
+$("introSaved").textContent = n>0 ? (n+" respostas salvas") : "Nenhum progresso salvo";
+var canContinue = n>0 && n<100;
+$("btnContinue").hidden = !canContinue;
+$("btnStart").textContent = n>0 ? "Recomeçar questionário" : "Iniciar questionário";
+var hasResult = isCompleted();
+$("savedWrap").hidden = !hasResult;
+if (hasResult) $("savedDate").textContent = state.completedAt ? "("+fmtDateBr(state.completedAt)+")" : "(teste concluído anteriormente)";
+}
+$("btnViewSaved").addEventListener("click", function(){
+if (!isCompleted()) return;
+backfillCompletion();
+refreshIntro();
+renderResult();
+setView("viewResult");
+activateTab("tOverview");
+});
+$("btnStart").addEventListener("click", function(){
+if (isCompleted()){
+confirmDialog("Você já tem um resultado salvo. Ao finalizar o novo teste, ele substituirá o resultado anterior. Deseja refazer o teste?", function(){
+state = {answers:{}, ts:null}; saveState();
+current=1; setView("viewQuiz"); renderQuestion();
+});
+} else if (answeredCount()>0){
+confirmDialog("Iniciar do zero apagará as respostas salvas. Deseja continuar?", function(){
+state = {answers:{}, ts:null}; saveState();
+current=1; setView("viewQuiz"); renderQuestion();
+});
+} else { current=1; setView("viewQuiz"); renderQuestion(); }
+});
+$("btnBackHome").addEventListener("click", function(){ setView("viewIntro"); refreshIntro(); });
+$("btnBackHome2").addEventListener("click", function(){ setView("viewIntro"); refreshIntro(); });
+$("btnContinue").addEventListener("click", function(){
+var firstOpen = 1;
+for (var i=1;i<=100;i++){ if (answerOf(i)===null){ firstOpen=i; break; } }
+current = firstOpen;
+setView("viewQuiz"); renderQuestion();
+});
+$("btnHome").addEventListener("click", function(){ setView("viewIntro"); refreshIntro(); });
+
+function doReset(){
+state = {answers:{}, ts:null, completed:false, completedAt:null}; saveState();
+current=1;
+setView("viewIntro"); refreshIntro();
+window.skipUI && skipUI.toast("Progresso reiniciado.", {type:"success"});
+}
+$("btnReset").addEventListener("click", function(){ confirmDialog("Isto apaga todas as respostas e o resultado salvo. Continuar?", doReset); });
+$("btnReset2").addEventListener("click", function(){ confirmDialog("Isto apaga todas as respostas e o resultado salvo. Continuar?", doReset); });
+
+$("btnPrint").addEventListener("click", function(){
+window.skipUI && skipUI.toast("Preparando impressão do relatório...");
+setTimeout(function(){ window.print(); }, 150);
+});
+function summaryText(){
+var R = computeAll();
+var lines = [
+"Bússola Política e Filosófica",
+"Posição geral: "+fmtScore(R.LDR)+" ("+R.band.label+")",
+"Tipo principal: "+R.cls.main.t,
+"Economia: "+axisLabel("ECO",R.S.scores.ECO)+" · Costumes: "+axisLabel("CUL",R.S.scores.CUL)+" · Ordem/liberdade: "+axisLabel("AUT",R.S.scores.AUT)+" · Nação: "+axisLabel("NAC",R.S.scores.NAC)+" · Instituições: "+axisLabel("INS",R.S.scores.INS),
+"Resultado interpretativo, não diagnóstico."
+];
+return lines.join("\n");
+}
+$("btnCopy").addEventListener("click", function(){
+var txt = summaryText();
+if (navigator.clipboard && navigator.clipboard.writeText){
+navigator.clipboard.writeText(txt).then(function(){ window.skipUI && skipUI.toast("Resumo copiado.",{type:"success"}); },
+function(){ window.skipUI && skipUI.toast("Não foi possível copiar.",{type:"error"}); });
+} else window.skipUI && skipUI.toast("Cópia não disponível neste navegador.",{type:"error"});
+});
+$("btnShare").addEventListener("click", function(){
+var url = "https://wa.me/?text="+encodeURIComponent(summaryText());
+window.open(url, "_blank", "noopener");
+window.skipUI && skipUI.toast("Abrindo o WhatsApp com o resumo.");
+});
+
+// ---------- Init ----------
+refreshIntro();
+setView("viewIntro");
+
+})();
+</script>
