@@ -1044,6 +1044,8 @@ body { background: #f4f6f9; color: #16202e; }
 .bp-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(44,74,114,.25); }
 .bp-btn:focus-visible, .bp-tab:focus-visible, .bp-scale button:focus-visible, .bp-nav-item:focus-visible { outline: 3px solid #2c4a72; outline-offset: 2px; }
 .bp-btn.ghost { background: #fff; color: #2c4a72; }
+.bp-btn.saved { background: #1d5a33; border-color: #1d5a33; }
+.bp-saved-note { font-size: .8rem; color: #4a5568; margin-left: 6px; font-weight: 400; }
 .bp-btn.danger { background: #fff; color: #9b2c2c; border-color: #9b2c2c; }
 .bp-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
 .bp-pill { display: inline-block; background: #e6ecf5; color: #2c4a72; border-radius: 999px; padding: 4px 12px; font-size: .8rem; font-weight: 600; margin: 2px; }
@@ -1121,7 +1123,7 @@ body { background: #f4f6f9; color: #16202e; }
 .bp-kpi-value { font-size: 1.8rem; }
 }
 @media print {
-.no-print, .bp-header .bp-actions, .bp-tabs, .bp-footer, .bp-nav-row, .bp-dialog, .shell-footer { display: none !important; }
+.no-print, .bp-header .bp-actions, .bp-tabs, .bp-footer, .bp-nav-row, .bp-dialog, .shell-footer, #btnBackHome, #btnBackHome2, #btnReset2, .bp-tabs button { display: none !important; }
 body { background: #fff !important; }
 .bp-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
 .bp-tab-panel { display: block !important; }
@@ -1160,6 +1162,9 @@ body { background: #fff !important; }
 <button class="bp-btn ghost" id="btnContinue" type="button" hidden>Continuar de onde parei</button>
 <button class="bp-btn" id="btnStart" type="button">Iniciar questionário</button>
 </div>
+</div>
+<div class="bp-actions" id="savedWrap" style="margin-top:14px" hidden>
+<button class="bp-btn saved" id="btnViewSaved" type="button">Consultar meu resultado salvo <span class="bp-saved-note" id="savedDate"></span></button>
 </div>
 </div>
 </section>
@@ -1211,6 +1216,9 @@ body { background: #fff !important; }
 <!-- RESULT -->
 <section id="viewResult" class="bp-view bp-hidden">
 <div class="bp-card" style="margin-bottom:16px">
+<div class="bp-actions no-print" style="justify-content:flex-end;margin-bottom:10px">
+<button class="bp-btn ghost" id="btnBackHome2" type="button" data-size="sm" style="padding:6px 12px;font-size:.85rem">Voltar ao início</button>
+</div>
 <div id="resHero" class="bp-hero-kpi"></div>
 </div>
 <div class="bp-card">
@@ -1256,6 +1264,9 @@ body { background: #fff !important; }
 <button class="bp-btn ghost" id="btnCopy" type="button">Copiar resumo</button>
 <button class="bp-btn ghost" id="btnShare" type="button">Compartilhar no WhatsApp</button>
 <button class="bp-btn danger" id="btnReset2" type="button">Reiniciar</button>
+</div>
+<div class="bp-actions no-print" style="margin-top:12px">
+<button class="bp-btn ghost" id="btnBackHome" type="button">Voltar ao início</button>
 </div>
 </div>
 
@@ -1527,6 +1538,13 @@ var pendingAction = null;
 function saveState() {
 state.ts = new Date().toISOString();
 if (store) store.set(state);
+}
+function isCompleted() { return !!(state.completed && state.completedAt && answeredCount() === 100); }
+function fmtDateBr(iso) {
+var d = new Date(iso);
+if (isNaN(d.getTime())) return "";
+var p = function(n){ return (n<10?"0":"")+n; };
+return p(d.getDate())+"/"+p(d.getMonth()+1)+"/"+d.getFullYear();
 }
 function answerOf(n) { return state.answers[n] !== undefined ? state.answers[n] : null; }
 function answeredCount() { return Object.keys(state.answers).length; }
@@ -2034,6 +2052,9 @@ $("revWarn").classList.remove("bp-hidden");
 window.skipUI && skipUI.toast("Responda todas as 100 perguntas para calcular.", {type:"error"});
 return;
 }
+state.completed = true;
+state.completedAt = new Date().toISOString();
+saveState();
 renderResult();
 setView("viewResult");
 activateTab("tOverview");
@@ -2060,15 +2081,31 @@ $("introSaved").textContent = n>0 ? (n+" respostas salvas") : "Nenhum progresso 
 var canContinue = n>0 && n<100;
 $("btnContinue").hidden = !canContinue;
 $("btnStart").textContent = n>0 ? "Recomeçar questionário" : "Iniciar questionário";
+var hasResult = isCompleted();
+$("savedWrap").hidden = !hasResult;
+if (hasResult) $("savedDate").textContent = "("+fmtDateBr(state.completedAt)+")";
 }
+$("btnViewSaved").addEventListener("click", function(){
+if (!isCompleted()) return;
+renderResult();
+setView("viewResult");
+activateTab("tOverview");
+});
 $("btnStart").addEventListener("click", function(){
-if (answeredCount()>0){
+if (isCompleted()){
+confirmDialog("Você já tem um resultado salvo. Ao finalizar o novo teste, ele substituirá o resultado anterior. Deseja refazer o teste?", function(){
+state = {answers:{}, ts:null}; saveState();
+current=1; setView("viewQuiz"); renderQuestion();
+});
+} else if (answeredCount()>0){
 confirmDialog("Iniciar do zero apagará as respostas salvas. Deseja continuar?", function(){
 state = {answers:{}, ts:null}; saveState();
 current=1; setView("viewQuiz"); renderQuestion();
 });
 } else { current=1; setView("viewQuiz"); renderQuestion(); }
 });
+$("btnBackHome").addEventListener("click", function(){ setView("viewIntro"); refreshIntro(); });
+$("btnBackHome2").addEventListener("click", function(){ setView("viewIntro"); refreshIntro(); });
 $("btnContinue").addEventListener("click", function(){
 var firstOpen = 1;
 for (var i=1;i<=100;i++){ if (answerOf(i)===null){ firstOpen=i; break; } }
@@ -2078,7 +2115,7 @@ setView("viewQuiz"); renderQuestion();
 $("btnHome").addEventListener("click", function(){ setView("viewIntro"); refreshIntro(); });
 
 function doReset(){
-state = {answers:{}, ts:null}; saveState();
+state = {answers:{}, ts:null, completed:false, completedAt:null}; saveState();
 current=1;
 setView("viewIntro"); refreshIntro();
 window.skipUI && skipUI.toast("Progresso reiniciado.", {type:"success"});
@@ -2117,6 +2154,6 @@ window.skipUI && skipUI.toast("Abrindo o WhatsApp com o resumo.");
 // ---------- Init ----------
 refreshIntro();
 setView("viewIntro");
-if (answeredCount()>0 && answeredCount()===100) { /* results available via Revisão */ }
+
 })();
 </script>
