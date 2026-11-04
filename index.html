@@ -1539,7 +1539,14 @@ function saveState() {
 state.ts = new Date().toISOString();
 if (store) store.set(state);
 }
-function isCompleted() { return !!(state.completed && state.completedAt && answeredCount() === 100); }
+function isCompleted() { return answeredCount() === 100 && (!!state.completedAt || !!state.completed); }
+function backfillCompletion() {
+if (!state.completedAt) {
+state.completed = true;
+state.completedAt = new Date().toISOString();
+saveState();
+}
+}
 function fmtDateBr(iso) {
 var d = new Date(iso);
 if (isNaN(d.getTime())) return "";
@@ -2083,10 +2090,12 @@ $("btnContinue").hidden = !canContinue;
 $("btnStart").textContent = n>0 ? "Recomeçar questionário" : "Iniciar questionário";
 var hasResult = isCompleted();
 $("savedWrap").hidden = !hasResult;
-if (hasResult) $("savedDate").textContent = "("+fmtDateBr(state.completedAt)+")";
+if (hasResult) $("savedDate").textContent = state.completedAt ? "("+fmtDateBr(state.completedAt)+")" : "(teste concluído anteriormente)";
 }
 $("btnViewSaved").addEventListener("click", function(){
 if (!isCompleted()) return;
+backfillCompletion();
+refreshIntro();
 renderResult();
 setView("viewResult");
 activateTab("tOverview");
